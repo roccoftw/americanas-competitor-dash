@@ -4,89 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Americanas | Competitor Radar</title>
+    
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2103/2103633.png">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        .column-scroll { height: calc(100vh - 140px); overflow-y: auto; }
-        ::-webkit-scrollbar { width: 4px; }
-        ::-webkit-scrollbar-thumb { background: #e0e0e0; border-radius: 10px; }
+        /* Scroll suave e fino para as colunas */
+        .column-scroll { height: calc(100vh - 160px); overflow-y: auto; scrollbar-width: thin; }
+        .column-scroll::-webkit-scrollbar { width: 4px; }
+        .column-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+        .post-card { transition: all 0.3s ease; }
+        .post-card:hover { transform: translateY(-2px); border-color: #E60014; }
     </style>
 </head>
-<body class="bg-gray-50 font-sans antialiased text-gray-900">
+<body class="bg-gray-100 font-sans antialiased text-gray-900">
 
-    <header class="bg-[#E60014] text-white p-4 shadow-xl sticky top-0 z-50">
+    <header class="bg-[#E60014] text-white p-4 shadow-2xl sticky top-0 z-50 border-b-4 border-white/10">
         <div class="max-w-full mx-auto flex justify-between items-center px-4">
-            <div>
-                <h1 class="text-xl font-black uppercase tracking-tighter italic">Americanas <span class="text-white/60 font-light">| Radar</span></h1>
+            <div class="flex items-center gap-4">
+                <h1 class="text-2xl font-black uppercase tracking-tighter italic italic">Americanas</h1>
+                <span class="h-6 w-[2px] bg-white/20"></span>
+                <p class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">Competitor Instagram Radar</p>
             </div>
-            <div class="text-[10px] font-mono bg-white/10 px-3 py-1 rounded">COMPETITOR REAL-TIME MONITOR</div>
+            <div id="relogio" class="text-xs font-mono bg-black/20 px-4 py-1 rounded-full border border-white/10 text-white/90"></div>
         </div>
     </header>
 
     <main class="p-4">
         <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
             
-            <div class="space-y-3">
-                <div class="bg-[#FFE600] p-2 rounded-t-lg font-black text-[10px] uppercase text-center shadow-sm">Mercado Livre</div>
-                <div id="feed-ml" class="column-scroll space-y-3"></div>
+            <div class="flex flex-col gap-3">
+                <div class="bg-[#FFE600] p-3 rounded-xl shadow-md flex justify-between items-center border border-yellow-400">
+                    <span class="font-black text-[11px] uppercase italic text-gray-900">Mercado Livre</span>
+                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                </div>
+                <div id="feed-ml" class="column-scroll space-y-4 px-1"></div>
             </div>
 
-            <div class="space-y-3">
-                <div class="bg-[#EE4D2D] p-2 rounded-t-lg font-black text-[10px] uppercase text-white text-center shadow-sm">Shopee</div>
-                <div id="feed-shopee" class="column-scroll space-y-3"></div>
+            <div class="flex flex-col gap-3">
+                <div class="bg-[#EE4D2D] p-3 rounded-xl shadow-md flex justify-between items-center border border-orange-600">
+                    <span class="font-black text-[11px] uppercase italic text-white text-shadow-sm">Shopee</span>
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                </div>
+                <div id="feed-shopee" class="column-scroll space-y-4 px-1"></div>
             </div>
 
-            <div class="space-y-3">
-                <div class="bg-[#EA1D2C] p-2 rounded-t-lg font-black text-[10px] uppercase text-white text-center shadow-sm">iFood</div>
-                <div id="feed-ifood" class="column-scroll space-y-3"></div>
+            <div class="flex flex-col gap-3">
+                <div class="bg-[#EA1D2C] p-3 rounded-xl shadow-md flex justify-between items-center border border-red-700">
+                    <span class="font-black text-[11px] uppercase italic text-white text-shadow-sm">iFood</span>
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                </div>
+                <div id="feed-ifood" class="column-scroll space-y-4 px-1"></div>
             </div>
 
-            <div class="space-y-3">
-                <div class="bg-[#0086FF] p-2 rounded-t-lg font-black text-[10px] uppercase text-white text-center shadow-sm">Magalu</div>
-                <div id="feed-magalu" class="column-scroll space-y-3"></div>
+            <div class="flex flex-col gap-3">
+                <div class="bg-[#0086FF] p-3 rounded-xl shadow-md flex justify-between items-center border border-blue-600">
+                    <span class="font-black text-[11px] uppercase italic text-white text-shadow-sm">Magazine Luiza</span>
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                </div>
+                <div id="feed-magalu" class="column-scroll space-y-4 px-1"></div>
             </div>
 
-            <div class="space-y-3">
-                <div class="bg-[#003399] p-2 rounded-t-lg font-black text-[10px] uppercase text-white text-center shadow-sm">Casas Bahia</div>
-                <div id="feed-casasbahia" class="column-scroll space-y-3"></div>
+            <div class="flex flex-col gap-3">
+                <div class="bg-[#003399] p-3 rounded-xl shadow-md flex justify-between items-center border border-blue-900">
+                    <span class="font-black text-[11px] uppercase italic text-white text-shadow-sm">Casas Bahia</span>
+                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                </div>
+                <div id="feed-casasbahia" class="column-scroll space-y-4 px-1"></div>
             </div>
 
         </div>
     </main>
 
     <script>
-        // Insira aqui as URLs dos seus Datasets do Apify para cada marca
-        const CONFIG = {
-            ml: 'URL_APIFY_ML',
-            shopee: 'URL_APIFY_SHOPEE',
-            ifood: 'URL_APIFY_IFOOD',
-            magalu: 'URL_APIFY_MAGALU',
-            casasbahia: 'URL_APIFY_CASASBAHIA'
+        // Relógio Real-Time
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('relogio').innerText = now.toLocaleTimeString('pt-BR') + ' • ' + now.toLocaleDateString('pt-BR');
+        }, 1000);
+
+        // INTEGRAÇÃO DAS SUAS APIs
+        const APIS = {
+            ml: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+            shopee: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+            ifood: 'https://api.apify.com/v2/datasets/kiXhxoVHPO9e5HOTe/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+            magalu: 'https://api.apify.com/v2/datasets/M3Okwl3oPKPCS0tae/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+            casasbahia: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N'
         };
 
-        async function loadCompetitor(url, containerId, accentColor) {
+        async function carregarFeed(url, containerId) {
             const container = document.getElementById(containerId);
             try {
-                const res = await fetch(url + '?clean=true&format=json');
-                const data = await res.json();
+                const response = await fetch(url + '&clean=true&format=json');
+                const posts = await response.json();
+                
+                // Ordenação Cronológica (Timestamp)
+                const ordenados = posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
                 container.innerHTML = '';
-                data.slice(0, 4).forEach(item => {
-                    const date = item.timestamp ? new Date(item.timestamp).toLocaleDateString('pt-BR') : 'Recente';
+                ordenados.slice(0, 4).forEach(post => {
+                    // Otimização de Imagem via Proxy
+                    const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(post.displayUrl || post.url || post.thumbnailUrl)}&w=400&fit=cover`;
+                    const link = post.url || `https://www.instagram.com/p/${post.shortCode}/`;
+                    const dataFormatada = new Date(post.timestamp).toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit'});
+                    
                     container.innerHTML += `
-                        <div class="bg-white border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition">
-                            ${item.displayUrl ? `<img src="https://images.weserv.nl/?url=${encodeURIComponent(item.displayUrl)}&w=300" class="w-full h-32 object-cover">` : ''}
+                        <div class="post-card bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
+                            <div class="relative aspect-square overflow-hidden bg-gray-100">
+                                <a href="${link}" target="_blank">
+                                    <img src="${imgUrl}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
+                                </a>
+                                <div class="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white text-[9px] px-2 py-0.5 rounded font-mono">
+                                    ${dataFormatada}
+                                </div>
+                            </div>
                             <div class="p-3">
-                                <p class="text-[10px] text-gray-400 mb-1 font-bold">${date}</p>
-                                <p class="text-[11px] leading-tight line-clamp-3 mb-2">${item.caption || item.full_text || ''}</p>
-                                <a href="${item.url}" target="_blank" class="text-[9px] font-bold uppercase text-blue-600">Ver Original</a>
+                                <p class="text-[10px] text-gray-600 line-clamp-2 italic leading-snug mb-3">"${post.caption || 'Sem legenda'}"</p>
+                                <div class="flex justify-between items-center border-t pt-2 border-gray-50">
+                                    <span class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">❤️ ${post.likesCount ? post.likesCount.toLocaleString() : '---'}</span>
+                                    <a href="${link}" target="_blank" class="text-[9px] font-black text-blue-600 uppercase italic hover:underline">Ver Post →</a>
+                                </div>
                             </div>
                         </div>`;
                 });
-            } catch (e) { container.innerHTML = '<p class="text-[10px] text-gray-300 italic">Aguardando dados...</p>'; }
+            } catch (e) { 
+                container.innerHTML = '<div class="text-[9px] text-gray-400 text-center py-10 italic">Aguardando dados da API...</div>'; 
+            }
         }
 
-        // Iniciar carregamento
-        Object.keys(CONFIG).forEach(key => loadCompetitor(CONFIG[key], `feed-${key}`));
+        // Inicialização em Massa
+        function init() {
+            Object.keys(APIS).forEach(key => carregarFeed(APIS[key], `feed-${key}`));
+        }
+
+        init();
     </script>
 </body>
 </html>
