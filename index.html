@@ -3,95 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Americanas | Competitor Radar</title>
+    <title>Americanas | AI Strategy Hub</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2103/2103633.png">
-    
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        
-        /* Scroll customizado e discreto */
-        .column-scroll { 
-            height: calc(100vh - 180px); 
-            overflow-y: auto; 
-            padding-right: 8px;
-        }
+        .column-scroll { height: calc(100vh - 180px); overflow-y: auto; padding-right: 8px; scrollbar-width: thin; }
         .column-scroll::-webkit-scrollbar { width: 3px; }
-        .column-scroll::-webkit-scrollbar-track { background: transparent; }
         .column-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-        
-        /* Efeito de card minimalista */
-        .post-card {
-            background: #ffffff;
-            border: 1px solid #f1f5f9;
-            transition: all 0.2s ease-in-out;
-        }
-        .post-card:hover {
-            border-color: #cbd5e1;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
-        }
+        .ai-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .ai-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
+        .bg-ai-glow { background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%); }
     </style>
 </head>
-<body class="antialiased">
+<body class="antialiased text-slate-900">
 
-    <header class="bg-white border-b border-slate-200 py-4 px-8 sticky top-0 z-50">
+    <header class="bg-white border-b border-slate-200 py-6 px-10 sticky top-0 z-50">
         <div class="max-w-full mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-4">
-                <div class="w-2 h-8 bg-[#E60014] rounded-full"></div>
+            <div class="flex items-center gap-6">
+                <div class="w-3 h-10 bg-[#E60014] rounded-full shadow-lg shadow-red-200"></div>
                 <div>
-                    <h1 class="text-lg font-extrabold tracking-tight text-slate-900 uppercase">MONITORAMENTO CONCORRENTES</h1>
-                    <p class="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">Intelligence Radar • Dashboard</p>
+                    <h1 class="text-xl font-black tracking-tighter uppercase italic">Americanas Intelligence</h1>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Competitor Strategic Analysis</p>
                 </div>
             </div>
-            <div id="relogio" class="text-[10px] font-medium text-slate-400 bg-slate-50 px-4 py-1.5 rounded-md border border-slate-100"></div>
+            <div id="relogio" class="text-[11px] font-mono text-slate-500 bg-slate-100 px-5 py-2 rounded-full border border-slate-200 shadow-sm"></div>
         </div>
     </header>
 
     <main class="p-8">
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-10">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
             
             <div class="space-y-6">
-                <div class="border-t-4 border-[#FFE600] pt-2">
-                    <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Mercado Livre</h2>
+                <div class="flex items-center gap-3 border-b border-slate-200 pb-4">
+                    <span class="w-3 h-3 bg-[#FFE600] rounded-full shadow-sm"></span>
+                    <h2 class="text-[12px] font-black text-slate-800 uppercase tracking-widest">Mercado Livre</h2>
                 </div>
-                <div id="feed-ml" class="column-scroll space-y-6"></div>
+                <div id="feed-ml" class="column-scroll space-y-8"></div>
             </div>
 
             <div class="space-y-6">
-                <div class="border-t-4 border-[#EE4D2D] pt-2">
-                    <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Shopee</h2>
+                <div class="flex items-center gap-3 border-b border-slate-200 pb-4">
+                    <span class="w-3 h-3 bg-[#EE4D2D] rounded-full shadow-sm"></span>
+                    <h2 class="text-[12px] font-black text-slate-800 uppercase tracking-widest">Shopee</h2>
                 </div>
-                <div id="feed-shopee" class="column-scroll space-y-6"></div>
+                <div id="feed-shopee" class="column-scroll space-y-8"></div>
             </div>
 
             <div class="space-y-6">
-                <div class="border-t-4 border-[#EA1D2C] pt-2">
-                    <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">iFood</h2>
+                <div class="flex items-center gap-3 border-b border-slate-200 pb-4">
+                    <span class="w-3 h-3 bg-[#EA1D2C] rounded-full shadow-sm"></span>
+                    <h2 class="text-[12px] font-black text-slate-800 uppercase tracking-widest">iFood</h2>
                 </div>
-                <div id="feed-ifood" class="column-scroll space-y-6"></div>
+                <div id="feed-ifood" class="column-scroll space-y-8"></div>
             </div>
 
             <div class="space-y-6">
-                <div class="border-t-4 border-[#0086FF] pt-2">
-                    <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Magalu</h2>
+                <div class="flex items-center gap-3 border-b border-slate-200 pb-4">
+                    <span class="w-3 h-3 bg-[#0086FF] rounded-full shadow-sm"></span>
+                    <h2 class="text-[12px] font-black text-slate-800 uppercase tracking-widest">Magalu</h2>
                 </div>
-                <div id="feed-magalu" class="column-scroll space-y-6"></div>
+                <div id="feed-magalu" class="column-scroll space-y-8"></div>
             </div>
 
             <div class="space-y-6">
-                <div class="border-t-4 border-[#003399] pt-2">
-                    <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Casas Bahia</h2>
+                <div class="flex items-center gap-3 border-b border-slate-200 pb-4">
+                    <span class="w-3 h-3 bg-[#003399] rounded-full shadow-sm"></span>
+                    <h2 class="text-[12px] font-black text-slate-800 uppercase tracking-widest">Casas Bahia</h2>
                 </div>
-                <div id="feed-casasbahia" class="column-scroll space-y-6"></div>
+                <div id="feed-casasbahia" class="column-scroll space-y-8"></div>
             </div>
 
         </div>
     </main>
 
     <script>
-        // Relógio Real-Time
         setInterval(() => {
             const now = new Date();
             document.getElementById('relogio').innerText = now.toLocaleTimeString('pt-BR') + ' • ' + now.toLocaleDateString('pt-BR');
@@ -105,6 +92,29 @@
             casasbahia: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N'
         };
 
+        // Função de Análise Semântica (Simula a IA no Front-end para categorização rápida)
+        function analisarPostagem(caption) {
+            const text = caption.toLowerCase();
+            let categoria = "PRODUTO";
+            let analise = "A postagem foca na exposição direta do produto para gerar desejo imediato.";
+
+            if (text.includes("promo") || text.includes("oferta") || text.includes("cupom") || text.includes("preço") || text.includes("off")) {
+                categoria = "VAREJO";
+                analise = "A postagem aborda uma oferta comercial agressiva, focada em conversão direta por preço ou benefício financeiro.";
+            } else if (text.includes("campanha") || text.includes("estreia") || text.includes("novo") || text.includes("apresenta")) {
+                categoria = "CAMPANHA";
+                analise = "A postagem faz parte de um movimento de branding ou lançamento de campanha sazonal da marca.";
+            } else if (text.includes("parceria") || text.includes("convidado") || text.includes("@")) {
+                categoria = "PARCERIA";
+                analise = "Estratégia de co-branding ou influência para expandir o alcance da marca através de terceiros.";
+            } else if (text.includes("ia") || text.includes("inteligência artificial") || text.includes("futuro")) {
+                categoria = "IA";
+                analise = "Uso de tecnologia e inovação como pilar de autoridade técnica e modernização do varejo.";
+            }
+
+            return { categoria, analise };
+        }
+
         async function carregarFeed(url, containerId) {
             const container = document.getElementById(containerId);
             try {
@@ -116,39 +126,46 @@
                 ordenados.slice(0, 4).forEach(post => {
                     const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(post.displayUrl || post.url)}&w=500&fit=cover`;
                     const link = post.url || `https://www.instagram.com/p/${post.shortCode}/`;
-                    const data = new Date(post.timestamp).toLocaleDateString('pt-BR', {day: '2-digit', month: 'short'});
                     
+                    // IA Insight Engine
+                    const insight = analisarPostagem(post.caption || "");
+                    const categoria = post.ai_category || insight.categoria;
+                    const analiseIA = post.ai_analysis || insight.analise;
+
                     container.innerHTML += `
-                        <div class="post-card rounded-2xl overflow-hidden shadow-sm">
-                            <a href="${link}" target="_blank" class="block relative group">
-                                <img src="${imgUrl}" class="w-full aspect-square object-cover" loading="lazy">
-                                <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
-                                <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2 py-1 rounded-lg shadow-sm">
-                                    <span class="text-[9px] font-bold text-slate-800">${data}</span>
+                        <div class="ai-card bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm">
+                            <div class="relative">
+                                <a href="${link}" target="_blank">
+                                    <img src="${imgUrl}" class="w-full aspect-square object-cover" loading="lazy">
+                                </a>
+                                <div class="absolute top-4 left-4">
+                                    <span class="text-[9px] font-black px-3 py-1.5 bg-white/90 backdrop-blur-xl rounded-full shadow-lg text-slate-800 tracking-widest border border-white/50">${categoria}</span>
                                 </div>
-                            </a>
-                            <div class="p-4 space-y-3">
-                                <p class="text-[11px] text-slate-500 leading-relaxed line-clamp-2">${post.caption || 'Sem legenda'}</p>
-                                <div class="flex items-center justify-between pt-1">
-                                    <div class="flex gap-3 text-[10px] font-medium text-slate-400">
-                                        <span>❤️ ${post.likesCount ? post.likesCount.toLocaleString() : '---'}</span>
-                                    </div>
-                                    <a href="${link}" target="_blank" class="text-[10px] font-bold text-slate-900 uppercase tracking-tighter hover:text-[#E60014]">Original →</a>
+                            </div>
+                            <div class="p-6 space-y-4">
+                                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
+                                    <p class="text-[8px] font-extrabold text-indigo-500 uppercase tracking-[0.2em] flex items-center gap-2">
+                                        <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(99,102,241,0.6)]"></span> 
+                                        Strategic Insight
+                                    </p>
+                                    <p class="text-[11px] font-medium text-slate-700 leading-relaxed italic">"${analiseIA}"</p>
+                                </div>
+                                
+                                <p class="text-[10px] text-slate-400 line-clamp-2 leading-tight">${post.caption || 'Sem legenda'}</p>
+                                
+                                <div class="flex items-center justify-between pt-2">
+                                    <div class="text-[10px] font-bold text-slate-300">❤️ ${post.likesCount ? post.likesCount.toLocaleString() : '---'}</div>
+                                    <a href="${link}" target="_blank" class="text-[10px] font-black text-slate-900 border-b-2 border-[#E60014] pb-0.5 transition-colors hover:text-[#E60014]">VIEW POST</a>
                                 </div>
                             </div>
                         </div>`;
                 });
             } catch (e) { 
-                container.innerHTML = '<div class="text-[10px] text-slate-300 py-10 text-center font-medium italic uppercase tracking-widest">Offline</div>'; 
+                container.innerHTML = '<div class="py-20 text-center text-[10px] text-slate-300 font-bold tracking-[0.3em] uppercase opacity-50">Syncing...</div>'; 
             }
         }
 
         Object.keys(APIS).forEach(key => carregarFeed(APIS[key], `feed-${key}`));
-        
-        // Auto-refresh a cada 15 minutos
-        setInterval(() => {
-            Object.keys(APIS).forEach(key => carregarFeed(APIS[key], `feed-${key}`));
-        }, 900000);
     </script>
 </body>
 </html>
