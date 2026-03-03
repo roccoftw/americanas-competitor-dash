@@ -4,73 +4,87 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Americanas | Competitor Radar</title>
-    
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2103/2103633.png">
     
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    
     <style>
-        /* Scroll suave e fino para as colunas */
-        .column-scroll { height: calc(100vh - 160px); overflow-y: auto; scrollbar-width: thin; }
-        .column-scroll::-webkit-scrollbar { width: 4px; }
-        .column-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .post-card { transition: all 0.3s ease; }
-        .post-card:hover { transform: translateY(-2px); border-color: #E60014; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        
+        /* Scroll customizado e discreto */
+        .column-scroll { 
+            height: calc(100vh - 180px); 
+            overflow-y: auto; 
+            padding-right: 8px;
+        }
+        .column-scroll::-webkit-scrollbar { width: 3px; }
+        .column-scroll::-webkit-scrollbar-track { background: transparent; }
+        .column-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        
+        /* Efeito de card minimalista */
+        .post-card {
+            background: #ffffff;
+            border: 1px solid #f1f5f9;
+            transition: all 0.2s ease-in-out;
+        }
+        .post-card:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
-<body class="bg-gray-100 font-sans antialiased text-gray-900">
+<body class="antialiased">
 
-    <header class="bg-[#E60014] text-white p-4 shadow-2xl sticky top-0 z-50 border-b-4 border-white/10">
-        <div class="max-w-full mx-auto flex justify-between items-center px-4">
+    <header class="bg-white border-b border-slate-200 py-4 px-8 sticky top-0 z-50">
+        <div class="max-w-full mx-auto flex justify-between items-center">
             <div class="flex items-center gap-4">
-                <h1 class="text-2xl font-black uppercase tracking-tighter italic italic">Americanas</h1>
-                <span class="h-6 w-[2px] bg-white/20"></span>
-                <p class="text-[10px] font-bold uppercase tracking-[0.2em] opacity-80">Competitor Instagram Radar</p>
+                <div class="w-2 h-8 bg-[#E60014] rounded-full"></div>
+                <div>
+                    <h1 class="text-lg font-extrabold tracking-tight text-slate-900 uppercase">Americanas</h1>
+                    <p class="text-[9px] font-semibold text-slate-400 uppercase tracking-widest">Intelligence Radar • Dashboard</p>
+                </div>
             </div>
-            <div id="relogio" class="text-xs font-mono bg-black/20 px-4 py-1 rounded-full border border-white/10 text-white/90"></div>
+            <div id="relogio" class="text-[10px] font-medium text-slate-400 bg-slate-50 px-4 py-1.5 rounded-md border border-slate-100"></div>
         </div>
     </header>
 
-    <main class="p-4">
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <main class="p-8">
+        <div class="grid grid-cols-1 md:grid-cols-5 gap-10">
             
-            <div class="flex flex-col gap-3">
-                <div class="bg-[#FFE600] p-3 rounded-xl shadow-md flex justify-between items-center border border-yellow-400">
-                    <span class="font-black text-[11px] uppercase italic text-gray-900">Mercado Livre</span>
-                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+            <div class="space-y-6">
+                <div class="border-t-4 border-[#FFE600] pt-2">
+                    <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Mercado Livre</h2>
                 </div>
-                <div id="feed-ml" class="column-scroll space-y-4 px-1"></div>
+                <div id="feed-ml" class="column-scroll space-y-6"></div>
             </div>
 
-            <div class="flex flex-col gap-3">
-                <div class="bg-[#EE4D2D] p-3 rounded-xl shadow-md flex justify-between items-center border border-orange-600">
-                    <span class="font-black text-[11px] uppercase italic text-white text-shadow-sm">Shopee</span>
-                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            <div class="space-y-6">
+                <div class="border-t-4 border-[#EE4D2D] pt-2">
+                    <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Shopee</h2>
                 </div>
-                <div id="feed-shopee" class="column-scroll space-y-4 px-1"></div>
+                <div id="feed-shopee" class="column-scroll space-y-6"></div>
             </div>
 
-            <div class="flex flex-col gap-3">
-                <div class="bg-[#EA1D2C] p-3 rounded-xl shadow-md flex justify-between items-center border border-red-700">
-                    <span class="font-black text-[11px] uppercase italic text-white text-shadow-sm">iFood</span>
-                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            <div class="space-y-6">
+                <div class="border-t-4 border-[#EA1D2C] pt-2">
+                    <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">iFood</h2>
                 </div>
-                <div id="feed-ifood" class="column-scroll space-y-4 px-1"></div>
+                <div id="feed-ifood" class="column-scroll space-y-6"></div>
             </div>
 
-            <div class="flex flex-col gap-3">
-                <div class="bg-[#0086FF] p-3 rounded-xl shadow-md flex justify-between items-center border border-blue-600">
-                    <span class="font-black text-[11px] uppercase italic text-white text-shadow-sm">Magazine Luiza</span>
-                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            <div class="space-y-6">
+                <div class="border-t-4 border-[#0086FF] pt-2">
+                    <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Magalu</h2>
                 </div>
-                <div id="feed-magalu" class="column-scroll space-y-4 px-1"></div>
+                <div id="feed-magalu" class="column-scroll space-y-6"></div>
             </div>
 
-            <div class="flex flex-col gap-3">
-                <div class="bg-[#003399] p-3 rounded-xl shadow-md flex justify-between items-center border border-blue-900">
-                    <span class="font-black text-[11px] uppercase italic text-white text-shadow-sm">Casas Bahia</span>
-                    <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+            <div class="space-y-6">
+                <div class="border-t-4 border-[#003399] pt-2">
+                    <h2 class="text-[11px] font-bold text-slate-400 uppercase tracking-widest">Casas Bahia</h2>
                 </div>
-                <div id="feed-casasbahia" class="column-scroll space-y-4 px-1"></div>
+                <div id="feed-casasbahia" class="column-scroll space-y-6"></div>
             </div>
 
         </div>
@@ -83,7 +97,6 @@
             document.getElementById('relogio').innerText = now.toLocaleTimeString('pt-BR') + ' • ' + now.toLocaleDateString('pt-BR');
         }, 1000);
 
-        // INTEGRAÇÃO DAS SUAS APIs
         const APIS = {
             ml: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
             shopee: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
@@ -97,47 +110,45 @@
             try {
                 const response = await fetch(url + '&clean=true&format=json');
                 const posts = await response.json();
-                
-                // Ordenação Cronológica (Timestamp)
                 const ordenados = posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                 
                 container.innerHTML = '';
                 ordenados.slice(0, 4).forEach(post => {
-                    // Otimização de Imagem via Proxy
-                    const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(post.displayUrl || post.url || post.thumbnailUrl)}&w=400&fit=cover`;
+                    const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(post.displayUrl || post.url)}&w=500&fit=cover`;
                     const link = post.url || `https://www.instagram.com/p/${post.shortCode}/`;
-                    const dataFormatada = new Date(post.timestamp).toLocaleDateString('pt-BR', {day: '2-digit', month: '2-digit'});
+                    const data = new Date(post.timestamp).toLocaleDateString('pt-BR', {day: '2-digit', month: 'short'});
                     
                     container.innerHTML += `
-                        <div class="post-card bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden group">
-                            <div class="relative aspect-square overflow-hidden bg-gray-100">
-                                <a href="${link}" target="_blank">
-                                    <img src="${imgUrl}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" loading="lazy">
-                                </a>
-                                <div class="absolute top-2 right-2 bg-black/50 backdrop-blur-sm text-white text-[9px] px-2 py-0.5 rounded font-mono">
-                                    ${dataFormatada}
+                        <div class="post-card rounded-2xl overflow-hidden shadow-sm">
+                            <a href="${link}" target="_blank" class="block relative group">
+                                <img src="${imgUrl}" class="w-full aspect-square object-cover" loading="lazy">
+                                <div class="absolute inset-0 bg-black/5 group-hover:bg-transparent transition-colors"></div>
+                                <div class="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2 py-1 rounded-lg shadow-sm">
+                                    <span class="text-[9px] font-bold text-slate-800">${data}</span>
                                 </div>
-                            </div>
-                            <div class="p-3">
-                                <p class="text-[10px] text-gray-600 line-clamp-2 italic leading-snug mb-3">"${post.caption || 'Sem legenda'}"</p>
-                                <div class="flex justify-between items-center border-t pt-2 border-gray-50">
-                                    <span class="text-[9px] font-black text-gray-400 uppercase tracking-tighter">❤️ ${post.likesCount ? post.likesCount.toLocaleString() : '---'}</span>
-                                    <a href="${link}" target="_blank" class="text-[9px] font-black text-blue-600 uppercase italic hover:underline">Ver Post →</a>
+                            </a>
+                            <div class="p-4 space-y-3">
+                                <p class="text-[11px] text-slate-500 leading-relaxed line-clamp-2">${post.caption || 'Sem legenda'}</p>
+                                <div class="flex items-center justify-between pt-1">
+                                    <div class="flex gap-3 text-[10px] font-medium text-slate-400">
+                                        <span>❤️ ${post.likesCount ? post.likesCount.toLocaleString() : '---'}</span>
+                                    </div>
+                                    <a href="${link}" target="_blank" class="text-[10px] font-bold text-slate-900 uppercase tracking-tighter hover:text-[#E60014]">Original →</a>
                                 </div>
                             </div>
                         </div>`;
                 });
             } catch (e) { 
-                container.innerHTML = '<div class="text-[9px] text-gray-400 text-center py-10 italic">Aguardando dados da API...</div>'; 
+                container.innerHTML = '<div class="text-[10px] text-slate-300 py-10 text-center font-medium italic uppercase tracking-widest">Offline</div>'; 
             }
         }
 
-        // Inicialização em Massa
-        function init() {
+        Object.keys(APIS).forEach(key => carregarFeed(APIS[key], `feed-${key}`));
+        
+        // Auto-refresh a cada 15 minutos
+        setInterval(() => {
             Object.keys(APIS).forEach(key => carregarFeed(APIS[key], `feed-${key}`));
-        }
-
-        init();
+        }, 900000);
     </script>
 </body>
 </html>
