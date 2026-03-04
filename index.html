@@ -2,170 +2,104 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Americanas | AI Strategy Hub</title>
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2103/2103633.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <title>Americanas | Multi-Channel Radar</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .column-scroll { height: calc(100vh - 180px); overflow-y: auto; padding-right: 8px; scrollbar-width: thin; }
-        .column-scroll::-webkit-scrollbar { width: 3px; }
-        .column-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-        .ai-card { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
-        .ai-card:hover { transform: translateY(-4px); box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1); }
-        .bg-ai-glow { background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%); }
+        body { font-family: 'Inter', sans-serif; background: #f8fafc; }
+        .column-scroll { height: calc(100vh - 250px); overflow-y: auto; scrollbar-width: thin; }
+        .ai-card { transition: all 0.3s ease; border: 1px solid #f1f5f9; }
+        .ai-card:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(0,0,0,0.05); }
     </style>
 </head>
-<body class="antialiased text-slate-900">
+<body class="antialiased">
 
-    <header class="bg-white border-b border-slate-200 py-6 px-10 sticky top-0 z-50">
+    <header class="bg-white border-b border-slate-200 p-6 sticky top-0 z-50 shadow-sm">
         <div class="max-w-full mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-6">
-                <div class="w-3 h-10 bg-[#E60014] rounded-full shadow-lg shadow-red-200"></div>
+            <div class="flex items-center gap-4">
+                <div class="w-2 h-10 bg-[#E60014] rounded-full"></div>
                 <div>
-                    <h1 class="text-xl font-black tracking-tighter uppercase italic">Americanas Intelligence</h1>
-                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.3em]">Competitor Strategic Analysis</p>
+                    <h1 class="text-xl font-extrabold text-slate-900 uppercase italic">Americanas Intelligence</h1>
+                    <div class="flex gap-4 mt-1">
+                        <button onclick="switchPlatform('instagram')" class="text-[10px] font-bold uppercase tracking-widest text-red-600 border-b-2 border-red-600 pb-1">Instagram</button>
+                        <button onclick="switchPlatform('youtube')" class="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-red-600 transition pb-1">YouTube</button>
+                    </div>
                 </div>
             </div>
-            <div id="relogio" class="text-[11px] font-mono text-slate-500 bg-slate-100 px-5 py-2 rounded-full border border-slate-200 shadow-sm"></div>
+            <div class="bg-slate-50 border px-4 py-2 rounded-xl text-[10px] font-mono text-slate-500" id="relogio"></div>
         </div>
     </header>
 
     <main class="p-8">
-        <div class="grid grid-cols-1 md:grid-cols-5 gap-8">
-            
-            <div class="space-y-6">
-                <div class="flex items-center gap-3 border-b border-slate-200 pb-4">
-                    <span class="w-3 h-3 bg-[#FFE600] rounded-full shadow-sm"></span>
-                    <h2 class="text-[12px] font-black text-slate-800 uppercase tracking-widest">Mercado Livre</h2>
-                </div>
-                <div id="feed-ml" class="column-scroll space-y-8"></div>
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6" id="dashboard-grid">
             </div>
-
-            <div class="space-y-6">
-                <div class="flex items-center gap-3 border-b border-slate-200 pb-4">
-                    <span class="w-3 h-3 bg-[#EE4D2D] rounded-full shadow-sm"></span>
-                    <h2 class="text-[12px] font-black text-slate-800 uppercase tracking-widest">Shopee</h2>
-                </div>
-                <div id="feed-shopee" class="column-scroll space-y-8"></div>
-            </div>
-
-            <div class="space-y-6">
-                <div class="flex items-center gap-3 border-b border-slate-200 pb-4">
-                    <span class="w-3 h-3 bg-[#EA1D2C] rounded-full shadow-sm"></span>
-                    <h2 class="text-[12px] font-black text-slate-800 uppercase tracking-widest">iFood</h2>
-                </div>
-                <div id="feed-ifood" class="column-scroll space-y-8"></div>
-            </div>
-
-            <div class="space-y-6">
-                <div class="flex items-center gap-3 border-b border-slate-200 pb-4">
-                    <span class="w-3 h-3 bg-[#0086FF] rounded-full shadow-sm"></span>
-                    <h2 class="text-[12px] font-black text-slate-800 uppercase tracking-widest">Magalu</h2>
-                </div>
-                <div id="feed-magalu" class="column-scroll space-y-8"></div>
-            </div>
-
-            <div class="space-y-6">
-                <div class="flex items-center gap-3 border-b border-slate-200 pb-4">
-                    <span class="w-3 h-3 bg-[#003399] rounded-full shadow-sm"></span>
-                    <h2 class="text-[12px] font-black text-slate-800 uppercase tracking-widest">Casas Bahia</h2>
-                </div>
-                <div id="feed-casasbahia" class="column-scroll space-y-8"></div>
-            </div>
-
-        </div>
     </main>
 
     <script>
-        setInterval(() => {
-            const now = new Date();
-            document.getElementById('relogio').innerText = now.toLocaleTimeString('pt-BR') + ' • ' + now.toLocaleDateString('pt-BR');
-        }, 1000);
+        const marcas = [
+            { id: 'ml', name: 'Mercado Livre', color: '#FFE600' },
+            { id: 'shopee', name: 'Shopee', color: '#EE4D2D' },
+            { id: 'ifood', name: 'iFood', color: '#EA1D2C' },
+            { id: 'magalu', name: 'Magalu', color: '#0086FF' },
+            { id: 'casasbahia', name: 'Casas Bahia', color: '#003399' },
+            { id: 'carrefour', name: 'Carrefour', color: '#004899' }
+        ];
 
-        const APIS = {
-            ml: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-            shopee: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-            ifood: 'https://api.apify.com/v2/datasets/kiXhxoVHPO9e5HOTe/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-            magalu: 'https://api.apify.com/v2/datasets/M3Okwl3oPKPCS0tae/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-            casasbahia: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N'
-        };
+        let currentPlatform = 'instagram';
 
-        // Função de Análise Semântica (Simula a IA no Front-end para categorização rápida)
-        function analisarPostagem(caption) {
-            const text = caption.toLowerCase();
-            let categoria = "PRODUTO";
-            let analise = "A postagem foca na exposição direta do produto para gerar desejo imediato.";
+        const supabase = netlify.createClient('SUA_URL', 'SUA_KEY'); // Substitua pelas variáveis do Vercel
 
-            if (text.includes("promo") || text.includes("oferta") || text.includes("cupom") || text.includes("preço") || text.includes("off")) {
-                categoria = "VAREJO";
-                analise = "A postagem aborda uma oferta comercial agressiva, focada em conversão direta por preço ou benefício financeiro.";
-            } else if (text.includes("campanha") || text.includes("estreia") || text.includes("novo") || text.includes("apresenta")) {
-                categoria = "CAMPANHA";
-                analise = "A postagem faz parte de um movimento de branding ou lançamento de campanha sazonal da marca.";
-            } else if (text.includes("parceria") || text.includes("convidado") || text.includes("@")) {
-                categoria = "PARCERIA";
-                analise = "Estratégia de co-branding ou influência para expandir o alcance da marca através de terceiros.";
-            } else if (text.includes("ia") || text.includes("inteligência artificial") || text.includes("futuro")) {
-                categoria = "IA";
-                analise = "Uso de tecnologia e inovação como pilar de autoridade técnica e modernização do varejo.";
-            }
-
-            return { categoria, analise };
+        function switchPlatform(p) {
+            currentPlatform = p;
+            renderDashboard();
         }
 
-        async function carregarFeed(url, containerId) {
-            const container = document.getElementById(containerId);
-            try {
-                const response = await fetch(url + '&clean=true&format=json');
-                const posts = await response.json();
-                const ordenados = posts.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                
-                container.innerHTML = '';
-                ordenados.slice(0, 4).forEach(post => {
-                    const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(post.displayUrl || post.url)}&w=500&fit=cover`;
-                    const link = post.url || `https://www.instagram.com/p/${post.shortCode}/`;
-                    
-                    // IA Insight Engine
-                    const insight = analisarPostagem(post.caption || "");
-                    const categoria = post.ai_category || insight.categoria;
-                    const analiseIA = post.ai_analysis || insight.analise;
+        async function fetchPosts(brandName) {
+            const { data } = await supabase
+                .from('competitor_posts')
+                .select('*')
+                .eq('brand', brandName)
+                .eq('platform', currentPlatform)
+                .order('created_at', { ascending: false })
+                .limit(3);
+            return data || [];
+        }
 
-                    container.innerHTML += `
-                        <div class="ai-card bg-white rounded-3xl overflow-hidden border border-slate-100 shadow-sm">
+        async function renderDashboard() {
+            const grid = document.getElementById('dashboard-grid');
+            grid.innerHTML = '';
+
+            for (const marca of marcas) {
+                const posts = await fetchPosts(marca.name);
+                let html = `
+                    <div class="space-y-6">
+                        <div class="border-t-4 pt-2" style="border-color: ${marca.color}">
+                            <h2 class="text-[11px] font-black text-slate-800 uppercase tracking-widest">${marca.name}</h2>
+                        </div>
+                        <div class="column-scroll space-y-6">`;
+                
+                posts.forEach(post => {
+                    html += `
+                        <div class="ai-card bg-white rounded-2xl overflow-hidden shadow-sm">
                             <div class="relative">
-                                <a href="${link}" target="_blank">
-                                    <img src="${imgUrl}" class="w-full aspect-square object-cover" loading="lazy">
-                                </a>
-                                <div class="absolute top-4 left-4">
-                                    <span class="text-[9px] font-black px-3 py-1.5 bg-white/90 backdrop-blur-xl rounded-full shadow-lg text-slate-800 tracking-widest border border-white/50">${categoria}</span>
-                                </div>
+                                <img src="${post.image_url}" class="w-full aspect-video object-cover">
+                                <span class="absolute top-2 left-2 text-[8px] font-bold px-2 py-1 bg-white/90 rounded-md shadow-sm uppercase italic">${post.category}</span>
                             </div>
-                            <div class="p-6 space-y-4">
-                                <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-2">
-                                    <p class="text-[8px] font-extrabold text-indigo-500 uppercase tracking-[0.2em] flex items-center gap-2">
-                                        <span class="w-1.5 h-1.5 bg-indigo-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(99,102,241,0.6)]"></span> 
-                                        Strategic Insight
-                                    </p>
-                                    <p class="text-[11px] font-medium text-slate-700 leading-relaxed italic">"${analiseIA}"</p>
-                                </div>
-                                
-                                <p class="text-[10px] text-slate-400 line-clamp-2 leading-tight">${post.caption || 'Sem legenda'}</p>
-                                
-                                <div class="flex items-center justify-between pt-2">
-                                    <div class="text-[10px] font-bold text-slate-300">❤️ ${post.likesCount ? post.likesCount.toLocaleString() : '---'}</div>
-                                    <a href="${link}" target="_blank" class="text-[10px] font-black text-slate-900 border-b-2 border-[#E60014] pb-0.5 transition-colors hover:text-[#E60014]">VIEW POST</a>
+                            <div class="p-4 space-y-3">
+                                <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100">
+                                    <p class="text-[10px] text-slate-700 leading-relaxed font-semibold">"${post.ai_analysis}"</p>
                                 </div>
                             </div>
                         </div>`;
                 });
-            } catch (e) { 
-                container.innerHTML = '<div class="py-20 text-center text-[10px] text-slate-300 font-bold tracking-[0.3em] uppercase opacity-50">Syncing...</div>'; 
+
+                html += `</div></div>`;
+                grid.innerHTML += html;
             }
         }
 
-        Object.keys(APIS).forEach(key => carregarFeed(APIS[key], `feed-${key}`));
+        renderDashboard();
     </script>
 </body>
 </html>
