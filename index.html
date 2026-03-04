@@ -2,104 +2,129 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Americanas | Multi-Channel Radar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Americanas | Multi-Channel Hub</title>
+    
+    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2103/2103633.png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    
     <style>
-        body { font-family: 'Inter', sans-serif; background: #f8fafc; }
-        .column-scroll { height: calc(100vh - 250px); overflow-y: auto; scrollbar-width: thin; }
-        .ai-card { transition: all 0.3s ease; border: 1px solid #f1f5f9; }
-        .ai-card:hover { transform: translateY(-3px); box-shadow: 0 15px 30px -5px rgba(0,0,0,0.05); }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .column-scroll { height: calc(100vh - 220px); overflow-y: auto; padding-right: 8px; }
+        .column-scroll::-webkit-scrollbar { width: 3px; }
+        .column-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        
+        .tab-active { border-bottom: 3px solid #E60014; color: #E60014; font-weight: 800; }
+        .ai-card { transition: all 0.3s ease-in-out; }
+        .ai-card:hover { transform: translateY(-3px); }
     </style>
 </head>
 <body class="antialiased">
 
-    <header class="bg-white border-b border-slate-200 p-6 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-full mx-auto flex justify-between items-center">
-            <div class="flex items-center gap-4">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-full mx-auto px-10 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-6">
                 <div class="w-2 h-10 bg-[#E60014] rounded-full"></div>
                 <div>
-                    <h1 class="text-xl font-extrabold text-slate-900 uppercase italic">Americanas Intelligence</h1>
-                    <div class="flex gap-4 mt-1">
-                        <button onclick="switchPlatform('instagram')" class="text-[10px] font-bold uppercase tracking-widest text-red-600 border-b-2 border-red-600 pb-1">Instagram</button>
-                        <button onclick="switchPlatform('youtube')" class="text-[10px] font-bold uppercase tracking-widest text-slate-400 hover:text-red-600 transition pb-1">YouTube</button>
+                    <h1 class="text-xl font-extrabold tracking-tight text-slate-900 uppercase italic">Americanas Intelligence</h1>
+                    <div class="flex gap-6 mt-2">
+                        <button onclick="changePlatform('instagram')" id="btn-insta" class="tab-active text-[10px] uppercase tracking-widest pb-1 transition-all">Instagram Feed</button>
+                        <button onclick="changePlatform('youtube')" id="btn-yt" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 transition-all">YouTube Channels</button>
                     </div>
                 </div>
             </div>
-            <div class="bg-slate-50 border px-4 py-2 rounded-xl text-[10px] font-mono text-slate-500" id="relogio"></div>
+            <div id="relogio" class="text-[10px] font-bold text-slate-400 bg-slate-50 px-4 py-2 rounded-lg border border-slate-100 italic"></div>
         </div>
     </header>
 
     <main class="p-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6" id="dashboard-grid">
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8" id="main-grid">
             </div>
     </main>
 
     <script>
-        const marcas = [
-            { id: 'ml', name: 'Mercado Livre', color: '#FFE600' },
-            { id: 'shopee', name: 'Shopee', color: '#EE4D2D' },
-            { id: 'ifood', name: 'iFood', color: '#EA1D2C' },
-            { id: 'magalu', name: 'Magalu', color: '#0086FF' },
-            { id: 'casasbahia', name: 'Casas Bahia', color: '#003399' },
-            { id: 'carrefour', name: 'Carrefour', color: '#004899' }
-        ];
-
         let currentPlatform = 'instagram';
 
-        const supabase = netlify.createClient('SUA_URL', 'SUA_KEY'); // Substitua pelas variáveis do Vercel
+        // LISTA DE MARCAS E SUAS APIs
+        const BRANDS = [
+            { id: 'ml', name: 'Mercado Livre', color: '#FFE600', 
+              insta_api: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+              yt_api: 'https://api.apify.com/v2/datasets/jkXYJa1B5myx8CXjU/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
+            },
+            { id: 'shopee', name: 'Shopee', color: '#EE4D2D', insta_api: 'SUA_API_SHOPEE', yt_api: 'SUA_API_YT_SHOPEE' },
+            { id: 'ifood', name: 'iFood', color: '#EA1D2C', insta_api: 'SUA_API_IFOOD', yt_api: 'SUA_API_YT_IFOOD' },
+            { id: 'magalu', name: 'Magalu', color: '#0086FF', insta_api: 'SUA_API_MAGALU', yt_api: 'SUA_API_YT_MAGALU' },
+            { id: 'casasbahia', name: 'Casas Bahia', color: '#003399', insta_api: 'SUA_API_CASASBAHIA', yt_api: 'SUA_API_YT_CASASBAHIA' },
+            { id: 'carrefour', name: 'Carrefour', color: '#004899', insta_api: 'SUA_API_CARREFOUR', yt_api: 'SUA_API_YT_CARREFOUR' }
+        ];
 
-        function switchPlatform(p) {
+        function changePlatform(p) {
             currentPlatform = p;
-            renderDashboard();
+            document.getElementById('btn-insta').className = p === 'instagram' ? 'tab-active text-[10px] uppercase tracking-widest pb-1' : 'text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 transition-all';
+            document.getElementById('btn-yt').className = p === 'youtube' ? 'tab-active text-[10px] uppercase tracking-widest pb-1' : 'text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 transition-all';
+            renderAll();
         }
 
-        async function fetchPosts(brandName) {
-            const { data } = await supabase
-                .from('competitor_posts')
-                .select('*')
-                .eq('brand', brandName)
-                .eq('platform', currentPlatform)
-                .order('created_at', { ascending: false })
-                .limit(3);
-            return data || [];
+        async function fetchFeed(url) {
+            try {
+                const response = await fetch(url + '&clean=true&format=json');
+                return await response.json();
+            } catch (e) { return []; }
         }
 
-        async function renderDashboard() {
-            const grid = document.getElementById('dashboard-grid');
+        async function renderAll() {
+            const grid = document.getElementById('main-grid');
             grid.innerHTML = '';
 
-            for (const marca of marcas) {
-                const posts = await fetchPosts(marca.name);
-                let html = `
-                    <div class="space-y-6">
-                        <div class="border-t-4 pt-2" style="border-color: ${marca.color}">
-                            <h2 class="text-[11px] font-black text-slate-800 uppercase tracking-widest">${marca.name}</h2>
+            for (const brand of BRANDS) {
+                const api = currentPlatform === 'instagram' ? brand.insta_api : brand.yt_api;
+                const posts = await fetchFeed(api);
+                const ordenados = posts.sort((a, b) => new Date(b.timestamp || b.publishedAt) - new Date(a.timestamp || a.publishedAt));
+
+                let colHtml = `
+                    <div class="flex flex-col gap-4">
+                        <div class="border-t-4 pt-2" style="border-color: ${brand.color}">
+                            <h2 class="text-[11px] font-black text-slate-800 uppercase tracking-widest">${brand.name}</h2>
                         </div>
                         <div class="column-scroll space-y-6">`;
-                
-                posts.forEach(post => {
-                    html += `
-                        <div class="ai-card bg-white rounded-2xl overflow-hidden shadow-sm">
-                            <div class="relative">
-                                <img src="${post.image_url}" class="w-full aspect-video object-cover">
-                                <span class="absolute top-2 left-2 text-[8px] font-bold px-2 py-1 bg-white/90 rounded-md shadow-sm uppercase italic">${post.category}</span>
+
+                ordenados.slice(0, 5).forEach(item => {
+                    const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(item.displayUrl || item.thumbnailUrl || item.thumbnail)}&w=500&fit=cover`;
+                    const link = item.url || `https://youtube.com/watch?v=${item.id}`;
+                    const titulo = item.caption || item.title || "Sem título";
+                    
+                    // IA MOCK (Aqui entraria o retorno do Perplexity via Supabase no futuro)
+                    const analiseIA = "O conteúdo aborda uma estratégia de varejo focada em demonstração de produto para conversão direta.";
+
+                    colHtml += `
+                        <div class="ai-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100">
+                            <div class="relative ${currentPlatform === 'youtube' ? 'aspect-video' : 'aspect-square'}">
+                                <a href="${link}" target="_blank">
+                                    <img src="${imgUrl}" class="w-full h-full object-cover">
+                                </a>
+                                <div class="absolute top-2 left-2 px-2 py-1 bg-white/90 backdrop-blur rounded text-[8px] font-black uppercase">${currentPlatform}</div>
                             </div>
                             <div class="p-4 space-y-3">
-                                <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100">
-                                    <p class="text-[10px] text-slate-700 leading-relaxed font-semibold">"${post.ai_analysis}"</p>
+                                <div class="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100">
+                                    <p class="text-[10px] text-slate-700 leading-relaxed italic font-medium">"${analiseIA}"</p>
                                 </div>
+                                <p class="text-[9px] text-slate-400 line-clamp-2">${titulo}</p>
                             </div>
                         </div>`;
                 });
 
-                html += `</div></div>`;
-                grid.innerHTML += html;
+                colHtml += `</div></div>`;
+                grid.innerHTML += colHtml;
             }
         }
 
-        renderDashboard();
+        // Relógio
+        setInterval(() => {
+            document.getElementById('relogio').innerText = new Date().toLocaleString('pt-BR');
+        }, 1000);
+
+        renderAll();
     </script>
 </body>
 </html>
