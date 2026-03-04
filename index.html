@@ -4,20 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Americanas | Multi-Channel Hub</title>
-    
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2103/2103633.png">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .column-scroll { height: calc(100vh - 220px); overflow-y: auto; padding-right: 8px; }
+        .column-scroll { height: calc(100vh - 220px); overflow-y: auto; padding-right: 8px; scrollbar-width: thin; }
         .column-scroll::-webkit-scrollbar { width: 3px; }
         .column-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-        
         .tab-active { border-bottom: 3px solid #E60014; color: #E60014; font-weight: 800; }
-        .ai-card { transition: all 0.3s ease-in-out; }
-        .ai-card:hover { transform: translateY(-3px); }
+        .ai-card { transition: all 0.3s ease; border: 1px solid #f1f5f9; }
     </style>
 </head>
 <body class="antialiased">
@@ -27,7 +23,7 @@
             <div class="flex items-center gap-6">
                 <div class="w-2 h-10 bg-[#E60014] rounded-full"></div>
                 <div>
-                    <h1 class="text-xl font-extrabold tracking-tight text-slate-900 uppercase italic">Americanas Intelligence</h1>
+                    <h1 class="text-xl font-extrabold text-slate-900 uppercase italic tracking-tighter">Americanas Intelligence</h1>
                     <div class="flex gap-6 mt-2">
                         <button onclick="changePlatform('instagram')" id="btn-insta" class="tab-active text-[10px] uppercase tracking-widest pb-1 transition-all">Instagram Feed</button>
                         <button onclick="changePlatform('youtube')" id="btn-yt" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 transition-all">YouTube Channels</button>
@@ -39,24 +35,37 @@
     </header>
 
     <main class="p-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8" id="main-grid">
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8" id="main-grid"></div>
     </main>
 
     <script>
         let currentPlatform = 'instagram';
 
-        // LISTA DE MARCAS E SUAS APIs
         const BRANDS = [
             { id: 'ml', name: 'Mercado Livre', color: '#FFE600', 
-              insta_api: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-              yt_api: 'https://api.apify.com/v2/datasets/jkXYJa1B5myx8CXjU/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
+              insta: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+              youtube: 'https://api.apify.com/v2/datasets/jkXYJa1B5myx8CXjU/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
             },
-            { id: 'shopee', name: 'Shopee', color: '#EE4D2D', insta_api: 'SUA_API_SHOPEE', yt_api: 'SUA_API_YT_SHOPEE' },
-            { id: 'ifood', name: 'iFood', color: '#EA1D2C', insta_api: 'SUA_API_IFOOD', yt_api: 'SUA_API_YT_IFOOD' },
-            { id: 'magalu', name: 'Magalu', color: '#0086FF', insta_api: 'SUA_API_MAGALU', yt_api: 'SUA_API_YT_MAGALU' },
-            { id: 'casasbahia', name: 'Casas Bahia', color: '#003399', insta_api: 'SUA_API_CASASBAHIA', yt_api: 'SUA_API_YT_CASASBAHIA' },
-            { id: 'carrefour', name: 'Carrefour', color: '#004899', insta_api: 'SUA_API_CARREFOUR', yt_api: 'SUA_API_YT_CARREFOUR' }
+            { id: 'shopee', name: 'Shopee', color: '#EE4D2D', 
+              insta: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+              youtube: '' 
+            },
+            { id: 'ifood', name: 'iFood', color: '#EA1D2C', 
+              insta: 'https://api.apify.com/v2/datasets/kiXhxoVHPO9e5HOTe/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+              youtube: '' 
+            },
+            { id: 'magalu', name: 'Magalu', color: '#0086FF', 
+              insta: 'https://api.apify.com/v2/datasets/M3Okwl3oPKPCS0tae/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+              youtube: '' 
+            },
+            { id: 'casasbahia', name: 'Casas Bahia', color: '#003399', 
+              insta: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+              youtube: '' 
+            },
+            { id: 'carrefour', name: 'Carrefour', color: '#004899', 
+              insta: '', // Adicionar API do Insta Carrefour aqui
+              youtube: '' 
+            }
         ];
 
         function changePlatform(p) {
@@ -67,6 +76,7 @@
         }
 
         async function fetchFeed(url) {
+            if (!url) return [];
             try {
                 const response = await fetch(url + '&clean=true&format=json');
                 return await response.json();
@@ -78,9 +88,11 @@
             grid.innerHTML = '';
 
             for (const brand of BRANDS) {
-                const api = currentPlatform === 'instagram' ? brand.insta_api : brand.yt_api;
+                const api = currentPlatform === 'instagram' ? brand.insta : brand.youtube;
                 const posts = await fetchFeed(api);
-                const ordenados = posts.sort((a, b) => new Date(b.timestamp || b.publishedAt) - new Date(a.timestamp || a.publishedAt));
+                
+                // Normalização de dados (Aceita formatos de data de ambas as redes)
+                const ordenados = posts.sort((a, b) => new Date(b.timestamp || b.publishedAt || b.date) - new Date(a.timestamp || a.publishedAt || a.date));
 
                 let colHtml = `
                     <div class="flex flex-col gap-4">
@@ -89,41 +101,37 @@
                         </div>
                         <div class="column-scroll space-y-6">`;
 
-                ordenados.slice(0, 5).forEach(item => {
-                    const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(item.displayUrl || item.thumbnailUrl || item.thumbnail)}&w=500&fit=cover`;
-                    const link = item.url || `https://youtube.com/watch?v=${item.id}`;
-                    const titulo = item.caption || item.title || "Sem título";
-                    
-                    // IA MOCK (Aqui entraria o retorno do Perplexity via Supabase no futuro)
-                    const analiseIA = "O conteúdo aborda uma estratégia de varejo focada em demonstração de produto para conversão direta.";
-
-                    colHtml += `
-                        <div class="ai-card bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-100">
-                            <div class="relative ${currentPlatform === 'youtube' ? 'aspect-video' : 'aspect-square'}">
-                                <a href="${link}" target="_blank">
-                                    <img src="${imgUrl}" class="w-full h-full object-cover">
-                                </a>
-                                <div class="absolute top-2 left-2 px-2 py-1 bg-white/90 backdrop-blur rounded text-[8px] font-black uppercase">${currentPlatform}</div>
-                            </div>
-                            <div class="p-4 space-y-3">
-                                <div class="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100">
-                                    <p class="text-[10px] text-slate-700 leading-relaxed italic font-medium">"${analiseIA}"</p>
+                if (posts.length === 0) {
+                    colHtml += `<div class="py-10 text-center text-[9px] text-slate-300 italic uppercase tracking-widest leading-loose">Aguardando API de ${currentPlatform}...</div>`;
+                } else {
+                    ordenados.slice(0, 5).forEach(item => {
+                        // Captura imagem e link de forma flexível para YT e Insta
+                        const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(item.displayUrl || item.thumbnail || item.thumbnailUrl)}&w=500&fit=cover`;
+                        const link = item.url || (item.id ? `https://youtube.com/watch?v=${item.id}` : '#');
+                        const titulo = item.caption || item.title || "Conteúdo sem título";
+                        
+                        colHtml += `
+                            <div class="ai-card bg-white rounded-2xl overflow-hidden shadow-sm">
+                                <div class="relative ${currentPlatform === 'youtube' ? 'aspect-video' : 'aspect-square'}">
+                                    <a href="${link}" target="_blank"><img src="${imgUrl}" class="w-full h-full object-cover"></a>
+                                    <div class="absolute top-2 left-2 px-2 py-1 bg-white/90 backdrop-blur rounded text-[8px] font-black uppercase tracking-tighter shadow-sm">${currentPlatform}</div>
                                 </div>
-                                <p class="text-[9px] text-slate-400 line-clamp-2">${titulo}</p>
-                            </div>
-                        </div>`;
-                });
+                                <div class="p-4 space-y-3">
+                                    <div class="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100">
+                                        <p class="text-[10px] text-slate-700 leading-relaxed italic font-medium">"A postagem aborda o posicionamento estratégico em ${currentPlatform}, focando na visibilidade de marca e conversão."</p>
+                                    </div>
+                                    <p class="text-[9px] text-slate-400 line-clamp-2 leading-tight">${titulo}</p>
+                                </div>
+                            </div>`;
+                    });
+                }
 
                 colHtml += `</div></div>`;
                 grid.innerHTML += colHtml;
             }
         }
 
-        // Relógio
-        setInterval(() => {
-            document.getElementById('relogio').innerText = new Date().toLocaleString('pt-BR');
-        }, 1000);
-
+        setInterval(() => { document.getElementById('relogio').innerText = new Date().toLocaleString('pt-BR'); }, 1000);
         renderAll();
     </script>
 </body>
