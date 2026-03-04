@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Americanas | Multi-Channel Hub</title>
+    <title>Americanas | Intelligence Hub</title>
     <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2103/2103633.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -14,6 +14,7 @@
         .column-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
         .tab-active { border-bottom: 3px solid #E60014; color: #E60014; font-weight: 800; }
         .ai-card { transition: all 0.3s ease; border: 1px solid #f1f5f9; }
+        .ai-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
     </style>
 </head>
 <body class="antialiased">
@@ -44,27 +45,27 @@
         const BRANDS = [
             { id: 'ml', name: 'Mercado Livre', color: '#FFE600', 
               insta: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-              youtube: 'https://api.apify.com/v2/datasets/7QcPloTqvCEGjQBFK/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
+              youtube: 'https://api.apify.com/v2/datasets/fJvDUXlWAtVlJ4eJM/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
             },
             { id: 'shopee', name: 'Shopee', color: '#EE4D2D', 
               insta: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-              youtube: '' 
+              youtube: 'https://api.apify.com/v2/datasets/TUSjJTzKNLbGb9FIx/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
             },
             { id: 'ifood', name: 'iFood', color: '#EA1D2C', 
               insta: 'https://api.apify.com/v2/datasets/kiXhxoVHPO9e5HOTe/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-              youtube: '' 
+              youtube: 'https://api.apify.com/v2/datasets/dom1DPPiCxV5WthCk/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
             },
             { id: 'magalu', name: 'Magalu', color: '#0086FF', 
               insta: 'https://api.apify.com/v2/datasets/M3Okwl3oPKPCS0tae/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-              youtube: '' 
+              youtube: 'https://api.apify.com/v2/datasets/0Rl4Nt2yMtVWOO5c4/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
             },
             { id: 'casasbahia', name: 'Casas Bahia', color: '#003399', 
               insta: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-              youtube: '' 
+              youtube: 'https://api.apify.com/v2/datasets/Nu4Q0vBcCLRDjYfHY/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
             },
             { id: 'carrefour', name: 'Carrefour', color: '#004899', 
-              insta: '', 
-              youtube: '' 
+              insta: 'https://api.apify.com/v2/datasets/wutcPfuc9JX3t4Jmg/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', 
+              youtube: 'https://api.apify.com/v2/datasets/AIfrLtFfV64nwN31l/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
             }
         ];
 
@@ -76,20 +77,17 @@
         }
 
         async function fetchFeed(url) {
-            if (!url || url === "") return [];
+            if (!url) return [];
             try {
                 const response = await fetch(url + '&clean=true&format=json');
                 const data = await response.json();
                 return Array.isArray(data) ? data : [];
-            } catch (e) { 
-                console.error("Erro na API:", e);
-                return []; 
-            }
+            } catch (e) { return []; }
         }
 
         async function renderAll() {
             const grid = document.getElementById('main-grid');
-            grid.innerHTML = '<div class="col-span-full py-20 text-center text-slate-400 animate-pulse uppercase text-[10px] font-bold tracking-widest">Atualizando Inteligência...</div>';
+            grid.innerHTML = '<div class="col-span-full py-20 text-center text-slate-400 animate-pulse uppercase text-[10px] font-bold tracking-widest">Sincronizando Dados...</div>';
 
             let allColsHtml = '';
 
@@ -97,10 +95,9 @@
                 const api = currentPlatform === 'instagram' ? brand.insta : brand.youtube;
                 const posts = await fetchFeed(api);
                 
-                // Ordenação por data (detecta múltiplos formatos de data do Apify)
                 const ordenados = posts.sort((a, b) => {
-                    const dateA = new Date(a.timestamp || a.publishedAt || a.date || a.createdAt);
-                    const dateB = new Date(b.timestamp || b.publishedAt || b.date || b.createdAt);
+                    const dateA = new Date(a.timestamp || a.publishedAt || a.date);
+                    const dateB = new Date(b.timestamp || b.publishedAt || b.date);
                     return dateB - dateA;
                 });
 
@@ -115,16 +112,13 @@
                     colHtml += `<div class="py-10 text-center text-[9px] text-slate-300 italic uppercase tracking-widest leading-loose">Aguardando feed de ${currentPlatform}...</div>`;
                 } else {
                     ordenados.slice(0, 5).forEach(item => {
-                        // MAPEAMENTO FLEXÍVEL PARA YOUTUBE E INSTAGRAM
+                        // Mapeamento dinâmico para garantir que imagem e título apareçam independente da API
                         const rawImg = item.videoThumbnail || item.displayUrl || item.thumbnail || item.thumbnailUrl;
-                        const imgUrl = rawImg ? `https://images.weserv.nl/?url=${encodeURIComponent(rawImg)}&w=500&fit=cover` : 'https://placehold.co/400x400?text=Sem+Imagem';
+                        const imgUrl = rawImg ? `https://images.weserv.nl/?url=${encodeURIComponent(rawImg)}&w=500&fit=cover` : 'https://placehold.co/400x250?text=Sem+Imagem';
                         
                         const link = item.url || (item.id ? `https://youtube.com/watch?v=${item.id}` : '#');
                         const titulo = item.title || item.caption || item.text || "Sem título";
                         
-                        // IA Strategic Insight (Perplexity Integration Placeholder)
-                        const analiseIA = `O conteúdo aborda o posicionamento de varejo do ${brand.name} no ${currentPlatform}, focando em alcance e engajamento sazonal.`;
-
                         colHtml += `
                             <div class="ai-card bg-white rounded-2xl overflow-hidden shadow-sm">
                                 <div class="relative ${currentPlatform === 'youtube' ? 'aspect-video' : 'aspect-square'}">
@@ -135,7 +129,7 @@
                                 </div>
                                 <div class="p-4 space-y-3">
                                     <div class="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100">
-                                        <p class="text-[10px] text-slate-700 leading-relaxed italic font-medium">"${analiseIA}"</p>
+                                        <p class="text-[10px] text-slate-700 leading-relaxed italic font-medium">"A postagem aborda o posicionamento de varejo do ${brand.name} no ${currentPlatform}, focando na estratégia multicanal."</p>
                                     </div>
                                     <p class="text-[9px] text-slate-400 line-clamp-2 leading-tight font-medium">${titulo}</p>
                                 </div>
@@ -150,8 +144,7 @@
         }
 
         setInterval(() => { 
-            const now = new Date();
-            document.getElementById('relogio').innerText = now.toLocaleString('pt-BR'); 
+            document.getElementById('relogio').innerText = new Date().toLocaleString('pt-BR'); 
         }, 1000);
 
         renderAll();
