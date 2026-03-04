@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Americanas | Intelligence Hub</title>
-    <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/2103/2103633.png">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
@@ -26,8 +25,12 @@
                 <div>
                     <h1 class="text-xl font-extrabold text-slate-900 uppercase italic tracking-tighter">Americanas Intelligence</h1>
                     <div class="flex gap-6 mt-2">
-                        <button onclick="changePlatform('instagram')" id="btn-insta" class="tab-active text-[10px] uppercase tracking-widest pb-1 transition-all">Instagram Feed</button>
-                        <button onclick="changePlatform('youtube')" id="btn-yt" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 transition-all">YouTube Channels</button>
+                        <button onclick="changePlatform('instagram')" id="btn-insta" class="tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="w-3 h-3"> Instagram Feed
+                        </button>
+                        <button onclick="changePlatform('youtube')" id="btn-yt" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 flex items-center gap-2">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" class="w-3.5 h-3.5"> YouTube Channels
+                        </button>
                     </div>
                 </div>
             </div>
@@ -71,8 +74,8 @@
 
         function changePlatform(p) {
             currentPlatform = p;
-            document.getElementById('btn-insta').className = p === 'instagram' ? 'tab-active text-[10px] uppercase tracking-widest pb-1' : 'text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 transition-all';
-            document.getElementById('btn-yt').className = p === 'youtube' ? 'tab-active text-[10px] uppercase tracking-widest pb-1' : 'text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 transition-all';
+            document.getElementById('btn-insta').className = p === 'instagram' ? 'tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2' : 'text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 flex items-center gap-2 transition-all';
+            document.getElementById('btn-yt').className = p === 'youtube' ? 'tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2' : 'text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 flex items-center gap-2 transition-all';
             renderAll();
         }
 
@@ -87,7 +90,7 @@
 
         async function renderAll() {
             const grid = document.getElementById('main-grid');
-            grid.innerHTML = '<div class="col-span-full py-20 text-center text-slate-400 animate-pulse uppercase text-[10px] font-bold tracking-widest">Sincronizando Dados...</div>';
+            grid.innerHTML = '<div class="col-span-full py-20 text-center text-slate-400 animate-pulse uppercase text-[10px] font-bold tracking-widest">Sincronizando Insights...</div>';
 
             let allColsHtml = '';
 
@@ -112,31 +115,43 @@
                     colHtml += `<div class="py-10 text-center text-[9px] text-slate-300 italic uppercase tracking-widest leading-loose">Aguardando feed de ${currentPlatform}...</div>`;
                 } else {
                     ordenados.slice(0, 5).forEach(item => {
-                        // Mapeamento dinâmico para garantir que imagem e título apareçam independente da API
                         const rawImg = item.videoThumbnail || item.displayUrl || item.thumbnail || item.thumbnailUrl;
                         const imgUrl = rawImg ? `https://images.weserv.nl/?url=${encodeURIComponent(rawImg)}&w=500&fit=cover` : 'https://placehold.co/400x250?text=Sem+Imagem';
-                        
                         const link = item.url || (item.id ? `https://youtube.com/watch?v=${item.id}` : '#');
                         const titulo = item.title || item.caption || item.text || "Sem título";
                         
+                        // Lógica da Data
+                        const rawDate = item.timestamp || item.publishedAt || item.date;
+                        const formattedDate = rawDate ? new Date(rawDate).toLocaleDateString('pt-BR', {day:'2-digit', month:'short', year:'2-digit'}) : '---';
+
+                        // Logo da plataforma
+                        const platformLogo = currentPlatform === 'instagram' ? 
+                            'https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg' : 
+                            'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg';
+
                         colHtml += `
                             <div class="ai-card bg-white rounded-2xl overflow-hidden shadow-sm">
                                 <div class="relative ${currentPlatform === 'youtube' ? 'aspect-video' : 'aspect-square'}">
                                     <a href="${link}" target="_blank">
                                         <img src="${imgUrl}" class="w-full h-full object-cover shadow-inner">
                                     </a>
-                                    <div class="absolute top-2 left-2 px-2 py-1 bg-white/90 backdrop-blur rounded text-[8px] font-black uppercase tracking-tighter shadow-sm border border-slate-100">${currentPlatform}</div>
+                                    <div class="absolute top-2 left-2 flex items-center gap-2 px-2 py-1 bg-white/90 backdrop-blur rounded shadow-sm border border-slate-100">
+                                        <img src="${platformLogo}" class="w-2.5 h-2.5">
+                                        <span class="text-[8px] font-black uppercase tracking-tighter">${currentPlatform}</span>
+                                    </div>
+                                    <div class="absolute bottom-2 right-2 px-2 py-1 bg-black/60 backdrop-blur rounded text-[8px] font-bold text-white uppercase tracking-widest">
+                                        ${formattedDate}
+                                    </div>
                                 </div>
                                 <div class="p-4 space-y-3">
                                     <div class="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100">
-                                        <p class="text-[10px] text-slate-700 leading-relaxed italic font-medium">"A postagem aborda o posicionamento de varejo do ${brand.name} no ${currentPlatform}, focando na estratégia multicanal."</p>
+                                        <p class="text-[10px] text-slate-700 leading-relaxed italic font-medium">"A postagem aborda o posicionamento estratégico em ${currentPlatform}, focando na visibilidade de marca."</p>
                                     </div>
                                     <p class="text-[9px] text-slate-400 line-clamp-2 leading-tight font-medium">${titulo}</p>
                                 </div>
                             </div>`;
                     });
                 }
-
                 colHtml += `</div></div>`;
                 allColsHtml += colHtml;
             }
