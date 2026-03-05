@@ -8,9 +8,9 @@
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
         .column-scroll { height: calc(100vh - 250px); overflow-y: auto; scrollbar-width: none; }
-        .mini-card { @apply bg-white rounded-lg overflow-hidden border border-slate-200 transition-all hover:scale-[1.03] hover:border-red-500; }
+        .mini-card { @apply bg-white rounded-lg overflow-hidden border border-slate-200 transition-all hover:scale-105 hover:border-red-500 shadow-sm; }
         .tab-active { @apply text-red-600 font-black border-b-2 border-red-600; }
-        .search-field { @apply w-full bg-white border border-slate-300 rounded px-3 py-2 text-xs focus:ring-1 focus:ring-indigo-500 outline-none font-medium; }
+        .search-field { @apply w-full bg-white border border-slate-300 rounded px-3 py-2 text-xs focus:ring-1 focus:ring-indigo-500 outline-none font-medium text-slate-700; }
     </style>
 </head>
 <body class="antialiased">
@@ -29,26 +29,26 @@
     </header>
 
     <main class="p-8">
-        <div id="view-social" class="grid grid-cols-6 gap-6">
+        <div id="view-social" class="grid grid-cols-1 md:grid-cols-6 gap-6">
             </div>
 
         <div id="view-offline" class="hidden max-w-4xl mx-auto">
             <div class="bg-[#E6E6FA] p-8 rounded-xl shadow-lg border border-indigo-200 space-y-6">
-                <h2 class="text-center text-indigo-800 font-black uppercase tracking-tighter text-xl mb-4">Pesquisa Avançada</h2>
+                <h2 class="text-center text-indigo-800 font-black uppercase tracking-tighter text-xl">Pesquisa Avançada</h2>
                 
-                <div class="grid grid-cols-1 gap-4 bg-white/50 p-6 rounded-lg border border-white">
+                <div class="bg-white/50 p-6 rounded-lg border border-white space-y-4">
                     <div class="flex items-center gap-4">
-                        <label class="w-32 text-right text-[10px] font-bold text-slate-600 uppercase">Anunciante</label>
-                        <input type="text" id="f-anunciante" placeholder='"SHOPEE"' class="search-field">
+                        <label class="w-32 text-right text-[10px] font-bold text-slate-600 uppercase italic">Anunciante</label>
+                        <input type="text" id="f-anunciante" placeholder='"CASAS BAHIA"' class="search-field">
                     </div>
                     <div class="flex items-center gap-4">
-                        <label class="w-32 text-right text-[10px] font-bold text-slate-600 uppercase">Palavra Chave</label>
-                        <input type="text" id="f-keyword" placeholder="Ex: promoção, oferta" class="search-field">
+                        <label class="w-32 text-right text-[10px] font-bold text-slate-600 uppercase italic">Palavra Chave</label>
+                        <input type="text" id="f-keyword" class="search-field">
                     </div>
                 </div>
 
                 <div class="bg-indigo-100/50 p-6 rounded-lg border border-indigo-200">
-                    <p class="text-[10px] font-black text-indigo-700 uppercase mb-4 flex items-center gap-2">● Definir Período</p>
+                    <p class="text-[10px] font-black text-indigo-700 uppercase mb-4 flex items-center gap-2 italic">● Definir Período</p>
                     <div class="flex gap-8 justify-center items-center">
                         <div class="flex items-center gap-2">
                             <label class="text-[9px] font-bold uppercase">De:</label>
@@ -56,14 +56,14 @@
                         </div>
                         <div class="flex items-center gap-2">
                             <label class="text-[9px] font-bold uppercase">Até:</label>
-                            <input type="date" id="f-fim" value="2026-01-30" class="search-field !w-auto">
+                            <input type="date" id="f-fim" value="2026-02-28" class="search-field !w-auto">
                         </div>
                     </div>
                 </div>
 
                 <div class="flex justify-center gap-4 pt-4">
-                    <button onclick="efetuarPesquisa()" class="bg-indigo-600 text-white px-10 py-3 rounded shadow-md font-black text-sm uppercase hover:bg-indigo-700 transition">Efetua Pesquisa</button>
-                    <button onclick="limparCampos()" class="bg-slate-400 text-white px-10 py-3 rounded shadow-md font-black text-sm uppercase">Limpa</button>
+                    <button onclick="efetuarPesquisa()" class="bg-[#6B7280] text-white px-10 py-3 rounded shadow-md font-black text-sm uppercase hover:bg-indigo-600 transition">Efetua Pesquisa</button>
+                    <button onclick="window.location.reload()" class="bg-[#8B8B8B] text-white px-10 py-3 rounded shadow-md font-black text-sm uppercase">Limpa</button>
                 </div>
             </div>
         </div>
@@ -104,8 +104,8 @@
                 
                 let col = `
                     <div class="space-y-3">
-                        <div class="border-t-2 pt-1 flex items-center gap-2" style="border-color:${brand.color}">
-                            <h2 class="text-[9px] font-black uppercase text-slate-800">${brand.name}</h2>
+                        <div class="border-t-2 pt-1" style="border-color:${brand.color}">
+                            <h2 class="text-[9px] font-black uppercase text-slate-800 italic">${brand.name}</h2>
                         </div>
                         <div class="column-scroll space-y-2">`;
 
@@ -125,15 +125,11 @@
         }
 
         function efetuarPesquisa() {
-            // Lógica de redirecionamento para o Arquivo
+            // Redirecionamento funcional para a página de monitoramento
             window.open('https://s03.arquivo.net/Ion3/', '_blank');
         }
 
-        function limparCampos() {
-            document.querySelectorAll('.search-field').forEach(i => i.value = "");
-        }
-
-        setInterval(() => { document.getElementById('relogio').innerText = new Date().toLocaleString(); }, 1000);
+        setInterval(() => { document.getElementById('relogio').innerText = new Date().toLocaleString('pt-BR'); }, 1000);
         renderSocial();
     </script>
 </body>
