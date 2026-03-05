@@ -2,135 +2,160 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Americanas | BI Intelligence Hub</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Americanas | Intelligence Hub</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Inter', sans-serif; background: #f1f5f9; }
-        .filter-select { @apply w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-[11px] font-semibold text-slate-600 focus:ring-2 focus:ring-red-500 outline-none; }
-        .data-row { @apply grid grid-cols-11 gap-4 p-4 bg-white border-b border-slate-100 items-center hover:bg-slate-50 transition; }
-        .header-label { @apply text-[9px] font-black text-slate-400 uppercase tracking-widest; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
+        .column-scroll { height: calc(100vh - 250px); overflow-y: auto; padding-right: 8px; scrollbar-width: thin; }
+        .column-scroll::-webkit-scrollbar { width: 3px; }
+        .column-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .tab-active { border-bottom: 3px solid #E60014; color: #E60014; font-weight: 800; }
+        .ai-card { transition: all 0.3s ease; border: 1px solid #f1f5f9; }
+        /* Garantindo que o Iframe ocupe a tela toda */
+        .iframe-container { width: 100%; height: calc(100vh - 180px); border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; background: white; }
     </style>
 </head>
-<body class="flex flex-col h-screen">
+<body class="antialiased">
 
-    <header class="bg-white border-b border-slate-200 p-4 px-8 flex justify-between items-center shadow-sm">
-        <div class="flex items-center gap-4">
-            <div class="w-2 h-8 bg-[#E60014] rounded-full"></div>
-            <h1 class="text-lg font-black uppercase italic tracking-tighter">Americanas <span class="text-slate-400 font-light">BI Radar</span></h1>
-        </div>
-        <div id="status-ia" class="text-[10px] font-bold text-green-500 bg-green-50 px-3 py-1 rounded-full border border-green-100 italic uppercase">
-            ● AI Sync Active
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-full mx-auto px-10 py-4 flex justify-between items-center">
+            <div class="flex items-center gap-6">
+                <div class="w-2 h-10 bg-[#E60014] rounded-full"></div>
+                <div>
+                    <h1 class="text-xl font-extrabold text-slate-900 uppercase italic tracking-tighter">Americanas Intelligence</h1>
+                    <div class="flex gap-6 mt-2">
+                        <button onclick="changeTab('instagram')" id="btn-insta" class="tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2 transition-all">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="w-3 h-3"> Instagram
+                        </button>
+                        <button onclick="changeTab('youtube')" id="btn-yt" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 flex items-center gap-2 transition-all">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" class="w-3.5 h-3.5"> YouTube
+                        </button>
+                        <button onclick="changeTab('archive')" id="btn-archive" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 flex items-center gap-2 transition-all">
+                            <span class="text-sm">📺</span> Media Archive (B.I)
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="relogio" class="text-[10px] font-bold text-slate-400 bg-slate-50 px-4 py-2 rounded-lg border border-slate-100 italic"></div>
         </div>
     </header>
 
-    <div class="flex flex-1 overflow-hidden">
-        
-        <aside class="w-64 bg-white border-r border-slate-200 p-6 flex flex-col gap-6 overflow-y-auto">
-            <h2 class="text-xs font-black text-slate-900 uppercase italic">Filtros Avançados</h2>
-            
+    <main class="p-8">
+        <div id="social-view" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8">
+            </div>
+
+        <div id="archive-view" class="hidden">
             <div class="space-y-4">
-                <div><label class="header-label">Anunciante</label>
-                    <select id="filter-brand" class="filter-select" onchange="applyFilters()">
-                        <option value="">Todos</option>
-                        <option>Mercado Livre</option><option>Shopee</option><option>Magalu</option><option>Carrefour</option>
-                    </select>
+                <div class="flex justify-between items-end">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Monitoramento Offline & TV | Filtros Ativos</p>
+                    <a href="https://arquivo.net/apws/?Arquivo_da_Propaganda_&COD=p3o$C6cNPr1nOZp0LJSFMZlFTr5X0VfM6jv7wIF76lRG0k803-8xDFgAyjnlyjQwBmR$vkG$qiV6sFgRs24zDsRt6F4E33n-3Ws91Gci8V1TAW9qHXRFL1FCA2RR81FKC0dAJbhuO7Rv$m4503t$DoW8JIVoJ6pI6GKw$Il4J4-2AXFzHKOJ9Ko7O1c01kR-DVsp9KpKRMOlUJhmWuudcNO7K4B833KDL5W1JAuc3yI5rnAikwkvChcgzUCMf--0yGNoEbCwTX8$5WkFvkO60kcy1H5F14gr2Fh64m8MM6tI93R22IF40LBwT6gdOW8EBLGg0Vl1$5RtA5-a5r0oaV" 
+                       target="_blank" class="text-[10px] font-bold text-blue-600 hover:underline">Abrir em nova aba ↗</a>
                 </div>
-                <div><label class="header-label">Categoria</label>
-                    <select id="filter-category" class="filter-select" onchange="applyFilters()">
-                        <option value="">Todas</option>
-                        <option>Varejo</option><option>Campanha</option><option>Produto</option><option>Publi</option>
-                    </select>
-                </div>
-                <div><label class="header-label">Mídia</label>
-                    <select id="filter-media" class="filter-select" onchange="applyFilters()">
-                        <option value="">Todas</option>
-                        <option>Instagram</option><option>YouTube</option><option>TV Aberta</option>
-                    </select>
-                </div>
-                <div><label class="header-label">Praça</label>
-                    <select id="filter-location" class="filter-select" onchange="applyFilters()">
-                        <option value="">Nacional</option><option>São Paulo</option><option>Rio de Janeiro</option>
-                    </select>
+                <div class="iframe-container">
+                    <iframe 
+                        id="bi-frame"
+                        src="https://arquivo.net/apws/?Arquivo_da_Propaganda_&COD=p3o$C6cNPr1nOZp0LJSFMZlFTr5X0VfM6jv7wIF76lRG0k803-8xDFgAyjnlyjQwBmR$vkG$qiV6sFgRs24zDsRt6F4E33n-3Ws91Gci8V1TAW9qHXRFL1FCA2RR81FKC0dAJbhuO7Rv$m4503t$DoW8JIVoJ6pI6GKw$Il4J4-2AXFzHKOJ9Ko7O1c01kR-DVsp9KpKRMOlUJhmWuudcNO7K4B833KDL5W1JAuc3yI5rnAikwkvChcgzUCMf--0yGNoEbCwTX8$5WkFvkO60kcy1H5F14gr2Fh64m8MM6tI93R22IF40LBwT6gdOW8EBLGg0Vl1$5RtA5-a5r0oaV" 
+                        style="width: 100%; height: 100%; border: none;"
+                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" 
+                        allowfullscreen>
+                    </iframe>
                 </div>
             </div>
-
-            <button onclick="clearFilters()" class="mt-4 text-[10px] font-bold text-red-600 hover:underline uppercase">Limpar Filtros</button>
-        </aside>
-
-        <main class="flex-1 flex flex-col bg-slate-50 overflow-hidden">
-            
-            <div class="grid grid-cols-11 gap-4 p-4 bg-white border-b border-slate-200 shadow-sm z-10">
-                <span class="header-label">ID</span>
-                <span class="header-label">Criativo</span>
-                <span class="header-label">Mídia</span>
-                <span class="header-label">Anunciante</span>
-                <span class="header-label">Produto</span>
-                <span class="header-label">Categoria</span>
-                <span class="header-label">Campanha</span>
-                <span class="header-label">Análise IA</span>
-                <span class="header-label">Data</span>
-                <span class="header-label">Praça</span>
-                <span class="header-label">Veículo</span>
-            </div>
-
-            <div id="data-container" class="flex-1 overflow-y-auto">
-                </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <script>
-        // Configuração do Supabase (Substitua pelas suas chaves)
-        const supabase = netlify.createClient('URL', 'KEY');
+        let currentTab = 'instagram';
 
-        async function applyFilters() {
-            const container = document.getElementById('data-container');
-            container.innerHTML = '<div class="p-10 text-center text-slate-400 animate-pulse text-xs uppercase font-bold tracking-widest">Filtrando Inteligência...</div>';
+        const BRANDS = [
+            { id: 'ml', name: 'Mercado Livre', color: '#FFE600', insta: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', youtube: 'https://api.apify.com/v2/datasets/fJvDUXlWAtVlJ4eJM/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { id: 'shopee', name: 'Shopee', color: '#EE4D2D', insta: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', youtube: 'https://api.apify.com/v2/datasets/TUSjJTzKNLbGb9FIx/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { id: 'ifood', name: 'iFood', color: '#EA1D2C', insta: 'https://api.apify.com/v2/datasets/kiXhxoVHPO9e5HOTe/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', youtube: 'https://api.apify.com/v2/datasets/dom1DPPiCxV5WthCk/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { id: 'magalu', name: 'Magalu', color: '#0086FF', insta: 'https://api.apify.com/v2/datasets/M3Okwl3oPKPCS0tae/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', youtube: 'https://api.apify.com/v2/datasets/0Rl4Nt2yMtVWOO5c4/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { id: 'casasbahia', name: 'Casas Bahia', color: '#003399', insta: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', youtube: 'https://api.apify.com/v2/datasets/Nu4Q0vBcCLRDjYfHY/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { id: 'carrefour', name: 'Carrefour', color: '#004899', insta: 'https://api.apify.com/v2/datasets/wutcPfuc9JX3t4Jmg/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', youtube: 'https://api.apify.com/v2/datasets/AIfrLtFfV64nwN31l/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' }
+        ];
 
-            const brand = document.getElementById('filter-brand').value;
-            const category = document.getElementById('filter-category').value;
-            const media = document.getElementById('filter-media').value;
-
-            let query = supabase.from('competitor_posts').select('*').order('created_at', { ascending: false });
-
-            if (brand) query = query.eq('brand', brand);
-            if (category) query = query.eq('category', category);
-            if (media) query = query.eq('platform', media);
-
-            const { data, error } = await query;
-
-            container.innerHTML = '';
-            data.forEach(item => {
-                const date = new Date(item.created_at).toLocaleDateString('pt-BR');
-                container.innerHTML += `
-                    <div class="data-row">
-                        <span class="text-[9px] font-mono text-slate-400">#${item.criativo_id || '001'}</span>
-                        <div class="w-10 h-10 rounded overflow-hidden bg-slate-200 border border-slate-200">
-                            <img src="${item.image_url}" class="w-full h-full object-cover">
-                        </div>
-                        <span class="text-[10px] font-bold text-slate-600">${item.platform || 'Social'}</span>
-                        <span class="text-[10px] font-black text-slate-900">${item.brand}</span>
-                        <span class="text-[10px] text-slate-500 truncate">Produto ABC</span>
-                        <span class="px-2 py-1 bg-slate-100 rounded text-[9px] font-black text-slate-600 w-fit">${item.category || 'VAREJO'}</span>
-                        <span class="text-[10px] text-slate-500 font-medium">${item.campanha || 'Sazonal'}</span>
-                        <span class="text-[9px] text-indigo-500 italic font-medium leading-tight truncate col-span-1 border-l-2 border-indigo-100 pl-2">
-                            ${item.ai_analysis || 'A postagem aborda estratégia de preço.'}
-                        </span>
-                        <span class="text-[10px] font-mono text-slate-400">${date}</span>
-                        <span class="text-[10px] text-slate-500 font-bold uppercase">${item.praca || 'NACIONAL'}</span>
-                        <span class="text-[10px] text-slate-900 font-bold">${item.veiculo || 'Instagram'}</span>
-                    </div>
-                `;
+        function changeTab(tabName) {
+            currentTab = tabName;
+            
+            // Atualizar Estilo das Abas
+            document.querySelectorAll('button[id^="btn-"]').forEach(btn => {
+                btn.className = 'text-slate-400 text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2 transition-all';
             });
+            document.getElementById('btn-' + (tabName === 'archive' ? 'archive' : (tabName === 'instagram' ? 'insta' : 'yt'))).className = 'tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2 transition-all';
+
+            // Toggle de Views
+            if (tabName === 'archive') {
+                document.getElementById('social-view').classList.add('hidden');
+                document.getElementById('archive-view').classList.remove('hidden');
+                // Recarregar o iframe para garantir que as buscas funcionem
+                const frame = document.getElementById('bi-frame');
+                frame.src = frame.src;
+            } else {
+                document.getElementById('social-view').classList.remove('hidden');
+                document.getElementById('archive-view').classList.add('hidden');
+                renderSocial();
+            }
         }
 
-        function clearFilters() {
-            document.querySelectorAll('select').forEach(s => s.value = "");
-            applyFilters();
+        async function fetchFeed(url) {
+            if (!url) return [];
+            try {
+                const response = await fetch(url + '&clean=true&format=json');
+                return await response.json();
+            } catch (e) { return []; }
         }
 
-        applyFilters();
+        async function renderSocial() {
+            const grid = document.getElementById('social-view');
+            grid.innerHTML = '';
+
+            for (const brand of BRANDS) {
+                const api = currentTab === 'instagram' ? brand.insta : brand.youtube;
+                const posts = await fetchFeed(api);
+                
+                let colHtml = `
+                    <div class="flex flex-col gap-4">
+                        <div class="border-t-4 pt-2" style="border-color: ${brand.color}">
+                            <h2 class="text-[11px] font-black text-slate-800 uppercase tracking-widest">${brand.name}</h2>
+                        </div>
+                        <div class="column-scroll space-y-6">`;
+
+                if (posts.length === 0) {
+                    colHtml += `<div class="py-10 text-center text-[9px] text-slate-300 italic uppercase">Aguardando API...</div>`;
+                } else {
+                    posts.sort((a,b) => new Date(b.timestamp || b.publishedAt) - new Date(a.timestamp || a.publishedAt)).slice(0, 5).forEach(item => {
+                        const rawImg = item.displayUrl || item.videoThumbnail || item.thumbnail;
+                        const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(rawImg)}&w=500&fit=cover`;
+                        const link = item.url || (item.id ? `https://youtube.com/watch?v=${item.id}` : '#');
+                        const date = new Date(item.timestamp || item.publishedAt).toLocaleDateString('pt-BR', {day:'2-digit', month:'short'});
+
+                        colHtml += `
+                            <div class="ai-card bg-white rounded-2xl overflow-hidden shadow-sm">
+                                <div class="relative ${currentTab === 'youtube' ? 'aspect-video' : 'aspect-square'}">
+                                    <a href="${link}" target="_blank"><img src="${imgUrl}" class="w-full h-full object-cover"></a>
+                                    <div class="absolute top-2 left-2 flex items-center gap-2 px-2 py-1 bg-white/90 backdrop-blur rounded shadow-sm">
+                                        <img src="${currentTab === 'instagram' ? 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg' : 'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg'}" class="w-2.5 h-2.5">
+                                        <span class="text-[8px] font-black uppercase">${currentTab}</span>
+                                    </div>
+                                    <div class="absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-[8px] font-bold text-white uppercase tracking-widest">${date}</div>
+                                </div>
+                                <div class="p-4 space-y-3">
+                                    <p class="text-[9px] text-slate-400 line-clamp-2 leading-tight">${item.caption || item.title || "Sem título"}</p>
+                                </div>
+                            </div>`;
+                    });
+                }
+                colHtml += `</div></div>`;
+                grid.innerHTML += colHtml;
+            }
+        }
+
+        setInterval(() => { document.getElementById('relogio').innerText = new Date().toLocaleString('pt-BR'); }, 1000);
+        renderSocial();
     </script>
 </body>
 </html>
