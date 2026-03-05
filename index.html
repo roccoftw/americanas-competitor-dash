@@ -2,167 +2,135 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Americanas | Intelligence Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <title>Americanas | BI Intelligence Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .column-scroll { height: calc(100vh - 220px); overflow-y: auto; padding-right: 8px; scrollbar-width: thin; }
-        .column-scroll::-webkit-scrollbar { width: 3px; }
-        .column-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
-        .tab-active { border-bottom: 3px solid #E60014; color: #E60014; font-weight: 800; }
-        .ai-card { transition: all 0.3s ease; border: 1px solid #f1f5f9; }
-        .ai-card:hover { transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; }
+        .filter-select { @apply w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-[11px] font-semibold text-slate-600 focus:ring-2 focus:ring-red-500 outline-none; }
+        .data-row { @apply grid grid-cols-11 gap-4 p-4 bg-white border-b border-slate-100 items-center hover:bg-slate-50 transition; }
+        .header-label { @apply text-[9px] font-black text-slate-400 uppercase tracking-widest; }
     </style>
 </head>
-<body class="antialiased">
+<body class="flex flex-col h-screen">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-full mx-auto px-10 py-4 flex justify-between items-center">
-            <div class="flex items-center gap-6">
-                <div class="w-2 h-10 bg-[#E60014] rounded-full"></div>
-                <div>
-                    <h1 class="text-xl font-extrabold text-slate-900 uppercase italic tracking-tighter">Americanas Intelligence</h1>
-                    <div class="flex gap-6 mt-2">
-                        <button onclick="changePlatform('instagram')" id="btn-insta" class="tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="w-3 h-3"> Instagram Feed
-                        </button>
-                        <button onclick="changePlatform('youtube')" id="btn-yt" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 flex items-center gap-2">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" class="w-3.5 h-3.5"> YouTube Channels
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div id="relogio" class="text-[10px] font-bold text-slate-400 bg-slate-50 px-4 py-2 rounded-lg border border-slate-100 italic"></div>
+    <header class="bg-white border-b border-slate-200 p-4 px-8 flex justify-between items-center shadow-sm">
+        <div class="flex items-center gap-4">
+            <div class="w-2 h-8 bg-[#E60014] rounded-full"></div>
+            <h1 class="text-lg font-black uppercase italic tracking-tighter">Americanas <span class="text-slate-400 font-light">BI Radar</span></h1>
+        </div>
+        <div id="status-ia" class="text-[10px] font-bold text-green-500 bg-green-50 px-3 py-1 rounded-full border border-green-100 italic uppercase">
+            ● AI Sync Active
         </div>
     </header>
 
-    <main class="p-8">
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8" id="main-grid"></div>
-    </main>
+    <div class="flex flex-1 overflow-hidden">
+        
+        <aside class="w-64 bg-white border-r border-slate-200 p-6 flex flex-col gap-6 overflow-y-auto">
+            <h2 class="text-xs font-black text-slate-900 uppercase italic">Filtros Avançados</h2>
+            
+            <div class="space-y-4">
+                <div><label class="header-label">Anunciante</label>
+                    <select id="filter-brand" class="filter-select" onchange="applyFilters()">
+                        <option value="">Todos</option>
+                        <option>Mercado Livre</option><option>Shopee</option><option>Magalu</option><option>Carrefour</option>
+                    </select>
+                </div>
+                <div><label class="header-label">Categoria</label>
+                    <select id="filter-category" class="filter-select" onchange="applyFilters()">
+                        <option value="">Todas</option>
+                        <option>Varejo</option><option>Campanha</option><option>Produto</option><option>Publi</option>
+                    </select>
+                </div>
+                <div><label class="header-label">Mídia</label>
+                    <select id="filter-media" class="filter-select" onchange="applyFilters()">
+                        <option value="">Todas</option>
+                        <option>Instagram</option><option>YouTube</option><option>TV Aberta</option>
+                    </select>
+                </div>
+                <div><label class="header-label">Praça</label>
+                    <select id="filter-location" class="filter-select" onchange="applyFilters()">
+                        <option value="">Nacional</option><option>São Paulo</option><option>Rio de Janeiro</option>
+                    </select>
+                </div>
+            </div>
+
+            <button onclick="clearFilters()" class="mt-4 text-[10px] font-bold text-red-600 hover:underline uppercase">Limpar Filtros</button>
+        </aside>
+
+        <main class="flex-1 flex flex-col bg-slate-50 overflow-hidden">
+            
+            <div class="grid grid-cols-11 gap-4 p-4 bg-white border-b border-slate-200 shadow-sm z-10">
+                <span class="header-label">ID</span>
+                <span class="header-label">Criativo</span>
+                <span class="header-label">Mídia</span>
+                <span class="header-label">Anunciante</span>
+                <span class="header-label">Produto</span>
+                <span class="header-label">Categoria</span>
+                <span class="header-label">Campanha</span>
+                <span class="header-label">Análise IA</span>
+                <span class="header-label">Data</span>
+                <span class="header-label">Praça</span>
+                <span class="header-label">Veículo</span>
+            </div>
+
+            <div id="data-container" class="flex-1 overflow-y-auto">
+                </div>
+        </main>
+    </div>
 
     <script>
-        let currentPlatform = 'instagram';
+        // Configuração do Supabase (Substitua pelas suas chaves)
+        const supabase = netlify.createClient('URL', 'KEY');
 
-        const BRANDS = [
-            { id: 'ml', name: 'Mercado Livre', color: '#FFE600', 
-              insta: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-              youtube: 'https://api.apify.com/v2/datasets/fJvDUXlWAtVlJ4eJM/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
-            },
-            { id: 'shopee', name: 'Shopee', color: '#EE4D2D', 
-              insta: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-              youtube: 'https://api.apify.com/v2/datasets/TUSjJTzKNLbGb9FIx/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
-            },
-            { id: 'ifood', name: 'iFood', color: '#EA1D2C', 
-              insta: 'https://api.apify.com/v2/datasets/kiXhxoVHPO9e5HOTe/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-              youtube: 'https://api.apify.com/v2/datasets/dom1DPPiCxV5WthCk/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
-            },
-            { id: 'magalu', name: 'Magalu', color: '#0086FF', 
-              insta: 'https://api.apify.com/v2/datasets/M3Okwl3oPKPCS0tae/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-              youtube: 'https://api.apify.com/v2/datasets/0Rl4Nt2yMtVWOO5c4/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
-            },
-            { id: 'casasbahia', name: 'Casas Bahia', color: '#003399', 
-              insta: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
-              youtube: 'https://api.apify.com/v2/datasets/Nu4Q0vBcCLRDjYfHY/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
-            },
-            { id: 'carrefour', name: 'Carrefour', color: '#004899', 
-              insta: 'https://api.apify.com/v2/datasets/wutcPfuc9JX3t4Jmg/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', 
-              youtube: 'https://api.apify.com/v2/datasets/AIfrLtFfV64nwN31l/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' 
-            }
-        ];
+        async function applyFilters() {
+            const container = document.getElementById('data-container');
+            container.innerHTML = '<div class="p-10 text-center text-slate-400 animate-pulse text-xs uppercase font-bold tracking-widest">Filtrando Inteligência...</div>';
 
-        function changePlatform(p) {
-            currentPlatform = p;
-            document.getElementById('btn-insta').className = p === 'instagram' ? 'tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2' : 'text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 flex items-center gap-2 transition-all';
-            document.getElementById('btn-yt').className = p === 'youtube' ? 'tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2' : 'text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 flex items-center gap-2 transition-all';
-            renderAll();
-        }
+            const brand = document.getElementById('filter-brand').value;
+            const category = document.getElementById('filter-category').value;
+            const media = document.getElementById('filter-media').value;
 
-        async function fetchFeed(url) {
-            if (!url) return [];
-            try {
-                const response = await fetch(url + '&clean=true&format=json');
-                const data = await response.json();
-                return Array.isArray(data) ? data : [];
-            } catch (e) { return []; }
-        }
+            let query = supabase.from('competitor_posts').select('*').order('created_at', { ascending: false });
 
-        async function renderAll() {
-            const grid = document.getElementById('main-grid');
-            grid.innerHTML = '<div class="col-span-full py-20 text-center text-slate-400 animate-pulse uppercase text-[10px] font-bold tracking-widest">Sincronizando Insights...</div>';
+            if (brand) query = query.eq('brand', brand);
+            if (category) query = query.eq('category', category);
+            if (media) query = query.eq('platform', media);
 
-            let allColsHtml = '';
+            const { data, error } = await query;
 
-            for (const brand of BRANDS) {
-                const api = currentPlatform === 'instagram' ? brand.insta : brand.youtube;
-                const posts = await fetchFeed(api);
-                
-                const ordenados = posts.sort((a, b) => {
-                    const dateA = new Date(a.timestamp || a.publishedAt || a.date);
-                    const dateB = new Date(b.timestamp || b.publishedAt || b.date);
-                    return dateB - dateA;
-                });
-
-                let colHtml = `
-                    <div class="flex flex-col gap-4">
-                        <div class="border-t-4 pt-2" style="border-color: ${brand.color}">
-                            <h2 class="text-[11px] font-black text-slate-800 uppercase tracking-widest">${brand.name}</h2>
+            container.innerHTML = '';
+            data.forEach(item => {
+                const date = new Date(item.created_at).toLocaleDateString('pt-BR');
+                container.innerHTML += `
+                    <div class="data-row">
+                        <span class="text-[9px] font-mono text-slate-400">#${item.criativo_id || '001'}</span>
+                        <div class="w-10 h-10 rounded overflow-hidden bg-slate-200 border border-slate-200">
+                            <img src="${item.image_url}" class="w-full h-full object-cover">
                         </div>
-                        <div class="column-scroll space-y-6">`;
-
-                if (posts.length === 0) {
-                    colHtml += `<div class="py-10 text-center text-[9px] text-slate-300 italic uppercase tracking-widest leading-loose">Aguardando feed de ${currentPlatform}...</div>`;
-                } else {
-                    ordenados.slice(0, 5).forEach(item => {
-                        const rawImg = item.videoThumbnail || item.displayUrl || item.thumbnail || item.thumbnailUrl;
-                        const imgUrl = rawImg ? `https://images.weserv.nl/?url=${encodeURIComponent(rawImg)}&w=500&fit=cover` : 'https://placehold.co/400x250?text=Sem+Imagem';
-                        const link = item.url || (item.id ? `https://youtube.com/watch?v=${item.id}` : '#');
-                        const titulo = item.title || item.caption || item.text || "Sem título";
-                        
-                        // Lógica da Data
-                        const rawDate = item.timestamp || item.publishedAt || item.date;
-                        const formattedDate = rawDate ? new Date(rawDate).toLocaleDateString('pt-BR', {day:'2-digit', month:'short', year:'2-digit'}) : '---';
-
-                        // Logo da plataforma
-                        const platformLogo = currentPlatform === 'instagram' ? 
-                            'https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg' : 
-                            'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg';
-
-                        colHtml += `
-                            <div class="ai-card bg-white rounded-2xl overflow-hidden shadow-sm">
-                                <div class="relative ${currentPlatform === 'youtube' ? 'aspect-video' : 'aspect-square'}">
-                                    <a href="${link}" target="_blank">
-                                        <img src="${imgUrl}" class="w-full h-full object-cover shadow-inner">
-                                    </a>
-                                    <div class="absolute top-2 left-2 flex items-center gap-2 px-2 py-1 bg-white/90 backdrop-blur rounded shadow-sm border border-slate-100">
-                                        <img src="${platformLogo}" class="w-2.5 h-2.5">
-                                        <span class="text-[8px] font-black uppercase tracking-tighter">${currentPlatform}</span>
-                                    </div>
-                                    <div class="absolute bottom-2 right-2 px-2 py-1 bg-black/60 backdrop-blur rounded text-[8px] font-bold text-white uppercase tracking-widest">
-                                        ${formattedDate}
-                                    </div>
-                                </div>
-                                <div class="p-4 space-y-3">
-                                    <div class="p-3 bg-indigo-50/50 rounded-xl border border-indigo-100">
-                                        <p class="text-[10px] text-slate-700 leading-relaxed italic font-medium">"A postagem aborda o posicionamento estratégico em ${currentPlatform}, focando na visibilidade de marca."</p>
-                                    </div>
-                                    <p class="text-[9px] text-slate-400 line-clamp-2 leading-tight font-medium">${titulo}</p>
-                                </div>
-                            </div>`;
-                    });
-                }
-                colHtml += `</div></div>`;
-                allColsHtml += colHtml;
-            }
-            grid.innerHTML = allColsHtml;
+                        <span class="text-[10px] font-bold text-slate-600">${item.platform || 'Social'}</span>
+                        <span class="text-[10px] font-black text-slate-900">${item.brand}</span>
+                        <span class="text-[10px] text-slate-500 truncate">Produto ABC</span>
+                        <span class="px-2 py-1 bg-slate-100 rounded text-[9px] font-black text-slate-600 w-fit">${item.category || 'VAREJO'}</span>
+                        <span class="text-[10px] text-slate-500 font-medium">${item.campanha || 'Sazonal'}</span>
+                        <span class="text-[9px] text-indigo-500 italic font-medium leading-tight truncate col-span-1 border-l-2 border-indigo-100 pl-2">
+                            ${item.ai_analysis || 'A postagem aborda estratégia de preço.'}
+                        </span>
+                        <span class="text-[10px] font-mono text-slate-400">${date}</span>
+                        <span class="text-[10px] text-slate-500 font-bold uppercase">${item.praca || 'NACIONAL'}</span>
+                        <span class="text-[10px] text-slate-900 font-bold">${item.veiculo || 'Instagram'}</span>
+                    </div>
+                `;
+            });
         }
 
-        setInterval(() => { 
-            document.getElementById('relogio').innerText = new Date().toLocaleString('pt-BR'); 
-        }, 1000);
+        function clearFilters() {
+            document.querySelectorAll('select').forEach(s => s.value = "");
+            applyFilters();
+        }
 
-        renderAll();
+        applyFilters();
     </script>
 </body>
 </html>
