@@ -1,57 +1,140 @@
-<div id="view-search" class="hidden max-w-2xl mx-auto mt-10">
-    <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100 space-y-6">
-        <div class="text-center space-y-2">
-            <h2 class="text-sm font-black uppercase italic text-slate-800 tracking-widest">Relatório de Busca Mídia Offline</h2>
-            <p class="text-[9px] text-slate-400 font-bold uppercase">Integração Direta: Arquivo da Propaganda</p>
-        </div>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Americanas | Intelligence Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
+        .column-scroll { height: calc(100vh - 250px); overflow-y: auto; scrollbar-width: none; }
+        .mini-card { @apply bg-white rounded-lg overflow-hidden border border-slate-200 transition-all hover:scale-[1.03] hover:border-red-500; }
+        .tab-active { @apply text-red-600 font-black border-b-2 border-red-600; }
+        .search-field { @apply w-full bg-white border border-slate-300 rounded px-3 py-2 text-xs focus:ring-1 focus:ring-indigo-500 outline-none font-medium; }
+    </style>
+</head>
+<body class="antialiased">
 
-        <div class="grid grid-cols-1 gap-4">
-            <div class="space-y-1">
-                <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest pl-1">ID da Peça / Código</label>
-                <input type="text" id="input-id" placeholder="Ex: T1655520" 
-                       class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs font-mono outline-none focus:ring-2 focus:ring-red-500 transition">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 px-8 py-4 flex justify-between items-center shadow-sm">
+        <div class="flex items-center gap-6">
+            <div class="w-2 h-8 bg-[#E60014] rounded-full"></div>
+            <h1 class="text-lg font-black uppercase italic tracking-tighter">Americanas <span class="text-slate-400 font-light">Radar</span></h1>
+            <nav class="flex gap-6">
+                <button onclick="switchView('instagram')" id="nav-insta" class="tab-active text-[10px] uppercase tracking-widest pb-1">Instagram</button>
+                <button onclick="switchView('youtube')" id="nav-yt" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1">YouTube</button>
+                <button onclick="switchView('offline')" id="nav-offline" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1">Pesquisa Avançada (TV)</button>
+            </nav>
+        </div>
+        <div id="relogio" class="text-[10px] font-mono text-slate-400 italic font-bold"></div>
+    </header>
+
+    <main class="p-8">
+        <div id="view-social" class="grid grid-cols-6 gap-6">
             </div>
 
-            <div class="grid grid-cols-2 gap-4">
-                <div class="space-y-1">
-                    <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest pl-1">Anunciante</label>
-                    <input type="text" id="input-anunciante" placeholder="Ex: Mercado Livre" 
-                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs outline-none focus:ring-2 focus:ring-red-500">
+        <div id="view-offline" class="hidden max-w-4xl mx-auto">
+            <div class="bg-[#E6E6FA] p-8 rounded-xl shadow-lg border border-indigo-200 space-y-6">
+                <h2 class="text-center text-indigo-800 font-black uppercase tracking-tighter text-xl mb-4">Pesquisa Avançada</h2>
+                
+                <div class="grid grid-cols-1 gap-4 bg-white/50 p-6 rounded-lg border border-white">
+                    <div class="flex items-center gap-4">
+                        <label class="w-32 text-right text-[10px] font-bold text-slate-600 uppercase">Anunciante</label>
+                        <input type="text" id="f-anunciante" placeholder='"SHOPEE"' class="search-field">
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <label class="w-32 text-right text-[10px] font-bold text-slate-600 uppercase">Palavra Chave</label>
+                        <input type="text" id="f-keyword" placeholder="Ex: promoção, oferta" class="search-field">
+                    </div>
                 </div>
-                <div class="space-y-1">
-                    <label class="text-[8px] font-black text-slate-400 uppercase tracking-widest pl-1">Campanha</label>
-                    <input type="text" id="input-campanha" placeholder="Ex: Black Friday" 
-                           class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-xs outline-none focus:ring-2 focus:ring-red-500">
+
+                <div class="bg-indigo-100/50 p-6 rounded-lg border border-indigo-200">
+                    <p class="text-[10px] font-black text-indigo-700 uppercase mb-4 flex items-center gap-2">● Definir Período</p>
+                    <div class="flex gap-8 justify-center items-center">
+                        <div class="flex items-center gap-2">
+                            <label class="text-[9px] font-bold uppercase">De:</label>
+                            <input type="date" id="f-inicio" value="2026-01-01" class="search-field !w-auto">
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <label class="text-[9px] font-bold uppercase">Até:</label>
+                            <input type="date" id="f-fim" value="2026-01-30" class="search-field !w-auto">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-4 pt-4">
+                    <button onclick="efetuarPesquisa()" class="bg-indigo-600 text-white px-10 py-3 rounded shadow-md font-black text-sm uppercase hover:bg-indigo-700 transition">Efetua Pesquisa</button>
+                    <button onclick="limparCampos()" class="bg-slate-400 text-white px-10 py-3 rounded shadow-md font-black text-sm uppercase">Limpa</button>
                 </div>
             </div>
         </div>
+    </main>
 
-        <button onclick="gerarBuscaArquivo()" 
-                class="w-full bg-[#E60014] text-white text-[10px] font-black py-4 rounded-2xl uppercase tracking-[0.2em] shadow-lg shadow-red-100 hover:shadow-red-200 hover:-translate-y-0.5 transition-all">
-            Realizar Busca no Arquivo.net →
-        </button>
-        
-        <p class="text-center text-[8px] text-slate-300 font-medium uppercase tracking-tighter">
-            Nota: A busca será aberta em uma nova janela segura do portal de mídia.
-        </p>
-    </div>
-</div>
+    <script>
+        let currentMode = 'instagram';
 
-<script>
-    function gerarBuscaArquivo() {
-        const idPeça = document.getElementById('input-id').value.trim();
-        const anunciante = document.getElementById('input-anunciante').value.trim();
-        
-        // Link Base que você forneceu do sistema de busca
-        const urlBase = "https://arquivo.net/apws/?Arquivo_da_Propaganda_&COD=p3o$C6cNPr1nOZp0LJSFMZlFTr5X0VfM6jv7wIF76lRG0k803-8xDFgAyjnlyjQwBmR$vkG$qiV6sFgRs24zDsRt6F4E33n-3Ws91Gci8V1TAW9qHXRFL1FCA2RR81FKC0dAJbhuO7Rv$m4503t$DoW8JIVoJ6pI6GKw$Il4J4-2AXFzHKOJ9Ko7O1c01kR-DVsp9KpKRMOlUJhmWuudcNO7K4B833KDL5W1JAuc3yI5rnAikwkvChcgzUCMf--0yGNoEbCwTX8$5WkFvkO60kcy1H5F14gr2Fh64m8MM6tI93R22IF40LBwT6gdOW8EBLGg0Vl1$5RtA5-a5r0oaV";
+        const BRANDS = [
+            { name: 'Mercado Livre', color: '#FFE600', insta: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', yt: 'https://api.apify.com/v2/datasets/fJvDUXlWAtVlJ4eJM/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Shopee', color: '#EE4D2D', insta: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', yt: 'https://api.apify.com/v2/datasets/TUSjJTzKNLbGb9FIx/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'iFood', color: '#EA1D2C', insta: 'https://api.apify.com/v2/datasets/kiXhxoVHPO9e5HOTe/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', yt: 'https://api.apify.com/v2/datasets/dom1DPPiCxV5WthCk/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Magalu', color: '#0086FF', insta: 'https://api.apify.com/v2/datasets/M3Okwl3oPKPCS0tae/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', yt: 'https://api.apify.com/v2/datasets/0Rl4Nt2yMtVWOO5c4/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Casas Bahia', color: '#003399', insta: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', yt: 'https://api.apify.com/v2/datasets/Nu4Q0vBcCLRDjYfHY/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Carrefour', color: '#004899', insta: 'https://api.apify.com/v2/datasets/wutcPfuc9JX3t4Jmg/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', yt: 'https://api.apify.com/v2/datasets/AIfrLtFfV64nwN31l/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' }
+        ];
 
-        if (idPeça) {
-            // Se houver um ID, abrimos a visualização da peça (URL de visualização que você enviou)
-            const urlVisualizacao = "https://s03.arquivo.net/ION3IMG/?COD=STHByteaXSXCoEULcSAygsQ9iO2Vuxl6w3NITyr39HthEIEU32KUkkwJkmnnD2QG2xZUC3AlOcCLg62aTPqkifxCSr9ext$$I8qIbKeRjN-jjBP6ccMWhdulbQIAvjIrndAijw3uxwXDfTX2qse8vuMurs7fYUXZlfbVVj3gVQaKXUzE";
-            window.open(urlVisualizacao, '_blank');
-        } else {
-            // Caso contrário, abre a busca geral do portal
-            window.open(urlBase, '_blank');
+        function switchView(mode) {
+            currentMode = mode;
+            document.getElementById('view-social').classList.toggle('hidden', mode === 'offline');
+            document.getElementById('view-offline').classList.toggle('hidden', mode !== 'offline');
+            
+            document.querySelectorAll('nav button').forEach(btn => btn.className = 'text-slate-400 text-[10px] uppercase tracking-widest pb-1');
+            const activeId = mode === 'instagram' ? 'nav-insta' : (mode === 'youtube' ? 'nav-yt' : 'nav-offline');
+            document.getElementById(activeId).className = 'tab-active text-[10px] uppercase tracking-widest pb-1';
+            
+            if(mode !== 'offline') renderSocial();
         }
-    }
-</script>
+
+        async function renderSocial() {
+            const grid = document.getElementById('view-social');
+            grid.innerHTML = '';
+
+            for (const brand of BRANDS) {
+                const api = currentMode === 'instagram' ? brand.insta : brand.yt;
+                const response = await fetch(api + '&clean=true&format=json');
+                const posts = await response.json();
+                
+                let col = `
+                    <div class="space-y-3">
+                        <div class="border-t-2 pt-1 flex items-center gap-2" style="border-color:${brand.color}">
+                            <h2 class="text-[9px] font-black uppercase text-slate-800">${brand.name}</h2>
+                        </div>
+                        <div class="column-scroll space-y-2">`;
+
+                posts.sort((a,b) => new Date(b.timestamp || b.publishedAt) - new Date(a.timestamp || a.publishedAt)).slice(0, 10).forEach(item => {
+                    const rawImg = item.displayUrl || item.videoThumbnail || item.thumbnail;
+                    const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(rawImg)}&w=300&h=300&fit=cover`;
+                    const link = item.url || (item.id ? `https://youtube.com/watch?v=${item.id}` : '#');
+                    
+                    col += `
+                        <a href="${link}" target="_blank" class="mini-card block">
+                            <img src="${imgUrl}" class="w-full ${currentMode === 'youtube' ? 'aspect-video' : 'aspect-square'} object-cover">
+                        </a>`;
+                });
+                col += `</div></div>`;
+                grid.innerHTML += col;
+            }
+        }
+
+        function efetuarPesquisa() {
+            // Lógica de redirecionamento para o Arquivo
+            window.open('https://s03.arquivo.net/Ion3/', '_blank');
+        }
+
+        function limparCampos() {
+            document.querySelectorAll('.search-field').forEach(i => i.value = "");
+        }
+
+        setInterval(() => { document.getElementById('relogio').innerText = new Date().toLocaleString(); }, 1000);
+        renderSocial();
+    </script>
+</body>
+</html>
