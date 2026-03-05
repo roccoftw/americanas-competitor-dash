@@ -2,134 +2,132 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Americanas | Intelligence Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Americanas | Análise de Concorrência</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f3f4f6; }
-        .column-scroll { height: calc(100vh - 250px); overflow-y: auto; scrollbar-width: none; }
+        /* Scroll invisível para manter o minimalismo */
+        .column-scroll { height: calc(100vh - 180px); overflow-y: auto; scrollbar-width: none; -ms-overflow-style: none; }
+        .column-scroll::-webkit-scrollbar { display: none; }
+        
+        /* Estilo dos cards */
         .mini-card { @apply bg-white rounded-lg overflow-hidden border border-slate-200 transition-all hover:scale-105 hover:border-red-500 shadow-sm; }
         .tab-active { @apply text-red-600 font-black border-b-2 border-red-600; }
-        .search-field { @apply w-full bg-white border border-slate-300 rounded px-3 py-2 text-xs focus:ring-1 focus:ring-indigo-500 outline-none font-medium text-slate-700; }
     </style>
 </head>
 <body class="antialiased">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 px-8 py-4 flex justify-between items-center shadow-sm">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 px-8 py-5 flex justify-between items-center shadow-sm">
         <div class="flex items-center gap-6">
             <div class="w-2 h-8 bg-[#E60014] rounded-full"></div>
-            <h1 class="text-lg font-black uppercase italic tracking-tighter">Americanas <span class="text-slate-400 font-light">Radar</span></h1>
-            <nav class="flex gap-6">
-                <button onclick="switchView('instagram')" id="nav-insta" class="tab-active text-[10px] uppercase tracking-widest pb-1">Instagram</button>
-                <button onclick="switchView('youtube')" id="nav-yt" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1">YouTube</button>
-                <button onclick="switchView('offline')" id="nav-offline" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1">Pesquisa Avançada (TV)</button>
+            <h1 class="text-lg font-black uppercase italic tracking-tighter text-slate-900">
+                ANÁLISE DE CONCORRÊNCIA | SOCIAL
+            </h1>
+            <nav class="flex gap-8 ml-4">
+                <button onclick="switchView('instagram')" id="nav-insta" class="tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="w-3 h-3"> Instagram
+                </button>
+                <button onclick="switchView('youtube')" id="nav-yt" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" class="w-3.5 h-3.5"> YouTube
+                </button>
             </nav>
         </div>
-        <div id="relogio" class="text-[10px] font-mono text-slate-400 italic font-bold"></div>
+        <div id="relogio" class="text-[10px] font-mono text-slate-400 font-bold italic"></div>
     </header>
 
     <main class="p-8">
-        <div id="view-social" class="grid grid-cols-1 md:grid-cols-6 gap-6">
+        <div id="view-social" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
             </div>
-
-        <div id="view-offline" class="hidden max-w-4xl mx-auto">
-            <div class="bg-[#E6E6FA] p-8 rounded-xl shadow-lg border border-indigo-200 space-y-6">
-                <h2 class="text-center text-indigo-800 font-black uppercase tracking-tighter text-xl">Pesquisa Avançada</h2>
-                
-                <div class="bg-white/50 p-6 rounded-lg border border-white space-y-4">
-                    <div class="flex items-center gap-4">
-                        <label class="w-32 text-right text-[10px] font-bold text-slate-600 uppercase italic">Anunciante</label>
-                        <input type="text" id="f-anunciante" placeholder='"CASAS BAHIA"' class="search-field">
-                    </div>
-                    <div class="flex items-center gap-4">
-                        <label class="w-32 text-right text-[10px] font-bold text-slate-600 uppercase italic">Palavra Chave</label>
-                        <input type="text" id="f-keyword" class="search-field">
-                    </div>
-                </div>
-
-                <div class="bg-indigo-100/50 p-6 rounded-lg border border-indigo-200">
-                    <p class="text-[10px] font-black text-indigo-700 uppercase mb-4 flex items-center gap-2 italic">● Definir Período</p>
-                    <div class="flex gap-8 justify-center items-center">
-                        <div class="flex items-center gap-2">
-                            <label class="text-[9px] font-bold uppercase">De:</label>
-                            <input type="date" id="f-inicio" value="2026-01-01" class="search-field !w-auto">
-                        </div>
-                        <div class="flex items-center gap-2">
-                            <label class="text-[9px] font-bold uppercase">Até:</label>
-                            <input type="date" id="f-fim" value="2026-02-28" class="search-field !w-auto">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-center gap-4 pt-4">
-                    <button onclick="efetuarPesquisa()" class="bg-[#6B7280] text-white px-10 py-3 rounded shadow-md font-black text-sm uppercase hover:bg-indigo-600 transition">Efetua Pesquisa</button>
-                    <button onclick="window.location.reload()" class="bg-[#8B8B8B] text-white px-10 py-3 rounded shadow-md font-black text-sm uppercase">Limpa</button>
-                </div>
-            </div>
-        </div>
     </main>
 
     <script>
         let currentMode = 'instagram';
 
+        // Configuração das APIs de monitoramento
         const BRANDS = [
-            { name: 'Mercado Livre', color: '#FFE600', insta: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', yt: 'https://api.apify.com/v2/datasets/fJvDUXlWAtVlJ4eJM/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { name: 'Shopee', color: '#EE4D2D', insta: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', yt: 'https://api.apify.com/v2/datasets/TUSjJTzKNLbGb9FIx/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { name: 'iFood', color: '#EA1D2C', insta: 'https://api.apify.com/v2/datasets/kiXhxoVHPO9e5HOTe/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', yt: 'https://api.apify.com/v2/datasets/dom1DPPiCxV5WthCk/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { name: 'Magalu', color: '#0086FF', insta: 'https://api.apify.com/v2/datasets/M3Okwl3oPKPCS0tae/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', yt: 'https://api.apify.com/v2/datasets/0Rl4Nt2yMtVWOO5c4/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { name: 'Casas Bahia', color: '#003399', insta: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', yt: 'https://api.apify.com/v2/datasets/Nu4Q0vBcCLRDjYfHY/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { name: 'Carrefour', color: '#004899', insta: 'https://api.apify.com/v2/datasets/wutcPfuc9JX3t4Jmg/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', yt: 'https://api.apify.com/v2/datasets/AIfrLtFfV64nwN31l/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' }
+            { name: 'Mercado Livre', color: '#FFE600', 
+              insta: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', 
+              yt: 'https://api.apify.com/v2/datasets/fJvDUXlWAtVlJ4eJM/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Shopee', color: '#EE4D2D', 
+              insta: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', 
+              yt: 'https://api.apify.com/v2/datasets/TUSjJTzKNLbGb9FIx/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'iFood', color: '#EA1D2C', 
+              insta: 'https://api.apify.com/v2/datasets/kiXhxoVHPO9e5HOTe/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', 
+              yt: 'https://api.apify.com/v2/datasets/dom1DPPiCxV5WthCk/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Magalu', color: '#0086FF', 
+              insta: 'https://api.apify.com/v2/datasets/M3Okwl3oPKPCS0tae/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', 
+              yt: 'https://api.apify.com/v2/datasets/0Rl4Nt2yMtVWOO5c4/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Casas Bahia', color: '#003399', 
+              insta: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', 
+              yt: 'https://api.apify.com/v2/datasets/Nu4Q0vBcCLRDjYfHY/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Carrefour', color: '#004899', 
+              insta: 'https://api.apify.com/v2/datasets/wutcPfuc9JX3t4Jmg/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', 
+              yt: 'https://api.apify.com/v2/datasets/AIfrLtFfV64nwN31l/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' }
         ];
 
         function switchView(mode) {
             currentMode = mode;
-            document.getElementById('view-social').classList.toggle('hidden', mode === 'offline');
-            document.getElementById('view-offline').classList.toggle('hidden', mode !== 'offline');
+            // Alterna estilos da navegação
+            document.querySelectorAll('nav button').forEach(btn => btn.className = 'text-slate-400 text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2');
+            const activeId = mode === 'instagram' ? 'nav-insta' : 'nav-yt';
+            document.getElementById(activeId).className = 'tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2';
             
-            document.querySelectorAll('nav button').forEach(btn => btn.className = 'text-slate-400 text-[10px] uppercase tracking-widest pb-1');
-            const activeId = mode === 'instagram' ? 'nav-insta' : (mode === 'youtube' ? 'nav-yt' : 'nav-offline');
-            document.getElementById(activeId).className = 'tab-active text-[10px] uppercase tracking-widest pb-1';
-            
-            if(mode !== 'offline') renderSocial();
+            renderSocial();
         }
 
         async function renderSocial() {
             const grid = document.getElementById('view-social');
-            grid.innerHTML = '';
+            grid.innerHTML = '<div class="col-span-full py-20 text-center text-[10px] font-bold text-slate-300 uppercase tracking-[0.3em] animate-pulse italic">Sincronizando Inteligência...</div>';
+
+            let gridContent = '';
 
             for (const brand of BRANDS) {
                 const api = currentMode === 'instagram' ? brand.insta : brand.yt;
-                const response = await fetch(api + '&clean=true&format=json');
-                const posts = await response.json();
-                
-                let col = `
-                    <div class="space-y-3">
-                        <div class="border-t-2 pt-1" style="border-color:${brand.color}">
-                            <h2 class="text-[9px] font-black uppercase text-slate-800 italic">${brand.name}</h2>
-                        </div>
-                        <div class="column-scroll space-y-2">`;
-
-                posts.sort((a,b) => new Date(b.timestamp || b.publishedAt) - new Date(a.timestamp || a.publishedAt)).slice(0, 10).forEach(item => {
-                    const rawImg = item.displayUrl || item.videoThumbnail || item.thumbnail;
-                    const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(rawImg)}&w=300&h=300&fit=cover`;
-                    const link = item.url || (item.id ? `https://youtube.com/watch?v=${item.id}` : '#');
+                try {
+                    const response = await fetch(api + '&clean=true&format=json');
+                    const posts = await response.json();
                     
-                    col += `
-                        <a href="${link}" target="_blank" class="mini-card block">
-                            <img src="${imgUrl}" class="w-full ${currentMode === 'youtube' ? 'aspect-video' : 'aspect-square'} object-cover">
-                        </a>`;
-                });
-                col += `</div></div>`;
-                grid.innerHTML += col;
+                    let colHtml = `
+                        <div class="space-y-4">
+                            <div class="border-t-2 pt-2" style="border-color:${brand.color}">
+                                <h2 class="text-[9px] font-black uppercase text-slate-800 italic tracking-widest">${brand.name}</h2>
+                            </div>
+                            <div class="column-scroll space-y-3">`;
+
+                    if (!Array.isArray(posts) || posts.length === 0) {
+                        colHtml += `<div class="py-10 text-center text-[8px] text-slate-300 italic uppercase">Aguardando feed...</div>`;
+                    } else {
+                        // Ordenação e limite de 12 miniaturas por coluna para visual limpo
+                        posts.sort((a,b) => new Date(b.timestamp || b.publishedAt) - new Date(a.timestamp || a.publishedAt)).slice(0, 12).forEach(item => {
+                            // Normalização da miniatura via proxy Weserv
+                            const rawImg = item.displayUrl || item.videoThumbnail || item.thumbnail || item.thumbnailUrl;
+                            const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(rawImg)}&w=300&h=300&fit=cover`;
+                            const link = item.url || (item.id ? `https://youtube.com/watch?v=${item.id}` : '#');
+                            
+                            colHtml += `
+                                <a href="${link}" target="_blank" class="mini-card block relative group">
+                                    <img src="${imgUrl}" class="w-full ${currentMode === 'youtube' ? 'aspect-video' : 'aspect-square'} object-cover">
+                                    <div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all"></div>
+                                </a>`;
+                        });
+                    }
+                    colHtml += `</div></div>`;
+                    gridContent += colHtml;
+                } catch (e) {
+                    gridContent += `<div class="space-y-4 text-center py-10 text-[8px] text-slate-300 italic uppercase border-t-2">Offline</div>`;
+                }
             }
+            grid.innerHTML = gridContent;
         }
 
-        function efetuarPesquisa() {
-            // Redirecionamento funcional para a página de monitoramento
-            window.open('https://s03.arquivo.net/Ion3/', '_blank');
-        }
+        // Relógio de atualização em tempo real
+        setInterval(() => { 
+            const now = new Date();
+            document.getElementById('relogio').innerText = now.toLocaleString('pt-BR'); 
+        }, 1000);
 
-        setInterval(() => { document.getElementById('relogio').innerText = new Date().toLocaleString('pt-BR'); }, 1000);
         renderSocial();
     </script>
 </body>
