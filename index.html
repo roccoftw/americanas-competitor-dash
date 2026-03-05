@@ -2,96 +2,84 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Americanas | Intelligence Hub & Search B.I.</title>
+    <title>Americanas | Intelligence Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .column-scroll { height: calc(100vh - 280px); overflow-y: auto; scrollbar-width: thin; }
-        .tab-active { border-bottom: 3px solid #E60014; color: #E60014; font-weight: 800; }
-        .search-input { @apply w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[11px] font-semibold focus:ring-2 focus:ring-red-500 outline-none; }
+        .column-scroll { height: calc(100vh - 200px); overflow-y: auto; scrollbar-width: none; }
+        .mini-card { transition: all 0.2s ease; border: 1px solid #f1f5f9; }
+        .mini-card:hover { transform: scale(1.02); border-color: #cbd5e1; }
+        .tab-active { color: #E60014; font-weight: 900; border-bottom: 2px solid #E60014; }
     </style>
 </head>
 <body class="antialiased">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm px-10 py-4">
-        <div class="flex justify-between items-center">
-            <div class="flex items-center gap-6">
-                <div class="w-2 h-10 bg-[#E60014] rounded-full"></div>
-                <div>
-                    <h1 class="text-xl font-black text-slate-900 uppercase italic tracking-tighter">Americanas Intelligence</h1>
-                    <div class="flex gap-6 mt-2">
-                        <button onclick="switchMode('social')" id="btn-social" class="tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2 transition-all">
-                             📡 Social Radar
-                        </button>
-                        <button onclick="switchMode('search')" id="btn-search" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 flex items-center gap-2 transition-all">
-                             🔍 Buscador B.I.
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div id="relogio" class="text-[10px] font-mono text-slate-400"></div>
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 px-8 py-3 flex justify-between items-center">
+        <div class="flex items-center gap-6">
+            <div class="w-1.5 h-6 bg-[#E60014] rounded-full"></div>
+            <h1 class="text-sm font-black uppercase italic tracking-tighter">Americanas Radar</h1>
+            <nav class="flex gap-4">
+                <button onclick="switchMode('instagram')" id="btn-insta" class="tab-active text-[9px] uppercase tracking-widest pb-1">Instagram</button>
+                <button onclick="switchMode('youtube')" id="btn-yt" class="text-slate-400 text-[9px] uppercase tracking-widest pb-1">YouTube</button>
+                <button onclick="switchMode('search')" id="btn-search" class="text-slate-400 text-[9px] uppercase tracking-widest pb-1">Buscador B.I.</button>
+            </nav>
         </div>
+        <div id="relogio" class="text-[9px] font-mono text-slate-400"></div>
     </header>
 
-    <main class="p-8">
-        
-        <div id="view-social" class="grid grid-cols-1 md:grid-cols-6 gap-6">
+    <main class="p-6">
+        <div id="view-social" class="grid grid-cols-6 gap-4">
             </div>
 
-        <div id="view-search" class="hidden max-w-4xl mx-auto space-y-8">
-            <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
-                <h2 class="text-lg font-black text-slate-800 uppercase italic mb-6">Relatório de Busca Mídia Offline</h2>
-                
-                <div class="grid grid-cols-2 gap-6">
-                    <div>
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Anunciante</label>
-                        <input type="text" id="search-anunciante" placeholder="Ex: Mercado Livre" class="search-input">
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Campanha / Produto</label>
-                        <input type="text" id="search-campanha" placeholder="Ex: Black Friday" class="search-input">
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Praça / Veículo</label>
-                        <input type="text" id="search-veiculo" placeholder="Ex: Globo SP" class="search-input">
-                    </div>
-                    <div>
-                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Categoria</label>
-                        <select id="search-cat" class="search-input">
-                            <option value="">Todas</option>
-                            <option>Varejo</option><option>Institucional</option><option>Lançamento</option>
-                        </select>
-                    </div>
+        <div id="view-search" class="hidden max-w-xl mx-auto mt-10">
+            <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-100 space-y-6">
+                <h2 class="text-xs font-black uppercase italic text-slate-800 tracking-widest text-center">Localizador de Peças TV/Offline</h2>
+                <div class="space-y-2">
+                    <label class="text-[9px] font-bold text-slate-400 uppercase tracking-widest">Código da Peça (ID)</label>
+                    <input type="text" id="peca-id" placeholder="Ex: T1655520" class="w-full bg-slate-50 border border-slate-200 rounded-lg px-4 py-3 text-xs font-mono outline-none focus:ring-1 focus:ring-red-500">
                 </div>
-
-                <button onclick="executarBusca()" class="w-full mt-8 bg-red-600 text-white font-black py-4 rounded-xl shadow-lg hover:bg-red-700 transition uppercase tracking-widest">
-                    Gerar Relatório e Redirecionar →
+                <button onclick="buscarPeca()" class="w-full bg-slate-900 text-white text-[10px] font-black py-4 rounded-xl uppercase tracking-[0.2em] hover:bg-red-600 transition">
+                    Visualizar Peça no Arquivo →
                 </button>
             </div>
-            
-            <p class="text-center text-[10px] text-slate-400 italic font-medium uppercase tracking-widest">
-                Os resultados serão abertos diretamente no portal Arquivo da Propaganda.
-            </p>
         </div>
     </main>
 
     <script>
+        let currentPlatform = 'instagram';
+
         const BRANDS = [
-            { name: 'Mercado Livre', color: '#FFE600', insta: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { name: 'Shopee', color: '#EE4D2D', insta: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { name: 'iFood', color: '#EA1D2C', insta: 'https://api.apify.com/v2/datasets/kiXhxoVHPO9e5HOTe/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { name: 'Magalu', color: '#0086FF', insta: 'https://api.apify.com/v2/datasets/M3Okwl3oPKPCS0tae/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { name: 'Casas Bahia', color: '#003399', insta: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { name: 'Carrefour', color: '#004899', insta: 'https://api.apify.com/v2/datasets/wutcPfuc9JX3t4Jmg/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' }
+            { name: 'Mercado Livre', color: '#FFE600', 
+              insta: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+              youtube: 'https://api.apify.com/v2/datasets/fJvDUXlWAtVlJ4eJM/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Shopee', color: '#EE4D2D', 
+              insta: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+              youtube: 'https://api.apify.com/v2/datasets/TUSjJTzKNLbGb9FIx/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'iFood', color: '#EA1D2C', 
+              insta: 'https://api.apify.com/v2/datasets/kiXhxoVHPO9e5HOTe/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+              youtube: 'https://api.apify.com/v2/datasets/dom1DPPiCxV5WthCk/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Magalu', color: '#0086FF', 
+              insta: 'https://api.apify.com/v2/datasets/M3Okwl3oPKPCS0tae/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+              youtube: 'https://api.apify.com/v2/datasets/0Rl4Nt2yMtVWOO5c4/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Casas Bahia', color: '#003399', 
+              insta: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+              youtube: 'https://api.apify.com/v2/datasets/Nu4Q0vBcCLRDjYfHY/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Carrefour', color: '#004899', 
+              insta: 'https://api.apify.com/v2/datasets/wutcPfuc9JX3t4Jmg/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N',
+              youtube: 'https://api.apify.com/v2/datasets/AIfrLtFfV64nwN31l/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' }
         ];
 
         function switchMode(mode) {
-            document.getElementById('view-social').classList.toggle('hidden', mode !== 'social');
+            currentPlatform = mode;
+            document.getElementById('view-social').classList.toggle('hidden', mode === 'search');
             document.getElementById('view-search').classList.toggle('hidden', mode !== 'search');
-            document.getElementById('btn-social').classList.toggle('tab-active', mode === 'social');
-            document.getElementById('btn-search').classList.toggle('tab-active', mode === 'search');
-            if(mode === 'social') renderSocial();
+            
+            document.querySelectorAll('nav button').forEach(btn => btn.className = 'text-slate-400 text-[9px] uppercase tracking-widest pb-1');
+            const activeBtn = mode === 'instagram' ? 'btn-insta' : (mode === 'youtube' ? 'btn-yt' : 'btn-search');
+            document.getElementById(activeBtn).className = 'tab-active text-[9px] uppercase tracking-widest pb-1';
+            
+            if(mode !== 'search') renderSocial();
         }
 
         async function renderSocial() {
@@ -99,40 +87,41 @@
             grid.innerHTML = '';
 
             for (const brand of BRANDS) {
-                const response = await fetch(brand.insta + '&clean=true&format=json');
+                const api = currentPlatform === 'instagram' ? brand.insta : brand.youtube;
+                const response = await fetch(api + '&clean=true&format=json');
                 const posts = await response.json();
                 
-                let col = `<div class="space-y-4">
-                    <div class="border-t-4 pt-2" style="border-color:${brand.color}"><h2 class="text-[11px] font-black uppercase">${brand.name}</h2></div>
-                    <div class="column-scroll space-y-4">`;
+                let col = `
+                    <div class="space-y-3">
+                        <div class="border-t-2 pt-1" style="border-color:${brand.color}">
+                            <h2 class="text-[8px] font-bold uppercase text-slate-400 tracking-widest">${brand.name}</h2>
+                        </div>
+                        <div class="column-scroll space-y-2">`;
 
-                posts.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 4).forEach(item => {
-                    const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(item.displayUrl || item.thumbnailUrl || item.videoThumbnail)}&w=400&h=400&fit=cover`;
+                posts.sort((a,b) => new Date(b.timestamp || b.publishedAt) - new Date(a.timestamp || a.publishedAt)).slice(0, 8).forEach(item => {
+                    const rawImg = item.displayUrl || item.videoThumbnail || item.thumbnail || item.thumbnailUrl;
+                    const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(rawImg)}&w=200&h=200&fit=cover`;
+                    const link = item.url || (item.id ? `https://youtube.com/watch?v=${item.id}` : '#');
+                    
                     col += `
-                        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-100">
-                            <img src="${imgUrl}" class="w-full aspect-square object-cover bg-slate-100">
-                            <div class="p-3"><p class="text-[9px] text-slate-400 line-clamp-2">${item.caption || 'Sem legenda'}</p></div>
-                        </div>`;
+                        <a href="${link}" target="_blank" class="mini-card block bg-white rounded-lg overflow-hidden">
+                            <img src="${imgUrl}" class="w-full aspect-square object-cover grayscale-[0.5] hover:grayscale-0 transition">
+                        </a>`;
                 });
                 col += `</div></div>`;
                 grid.innerHTML += col;
             }
         }
 
-        function executarBusca() {
-            // Pega os termos de busca
-            const anun = document.getElementById('search-anunciante').value;
-            const camp = document.getElementById('search-campanha').value;
-            const praca = document.getElementById('search-veiculo').value;
-            
-            // Link base do arquivo que você forneceu
-            const linkBase = "https://arquivo.net/apws/?Arquivo_da_Propaganda_&COD=p3o$C6cNPr1nOZp0LJSFMZlFTr5X0VfM6jv7wIF76lRG0k803-8xDFgAyjnlyjQwBmR$vkG$qiV6sFgRs24zDsRt6F4E33n-3Ws91Gci8V1TAW9qHXRFL1FCA2RR81FKC0dAJbhuO7Rv$m4503t$DoW8JIVoJ6pI6GKw$Il4J4-2AXFzHKOJ9Ko7O1c01kR-DVsp9KpKRMOlUJhmWuudcNO7K4B833KDL5W1JAuc3yI5rnAikwkvChcgzUCMf--0yGNoEbCwTX8$5WkFvkO60kcy1H5F14gr2Fh64m8MM6tI93R22IF40LBwT6gdOW8EBLGg0Vl1$5RtA5-a5r0oaV";
-            
-            // Abre o arquivo - em um sistema real, aqui você concatenaria os termos de busca na URL se o portal permitir parâmetros via GET
-            window.open(linkBase, '_blank');
+        function buscarPeca() {
+            const id = document.getElementById('peca-id').value.trim();
+            if(!id) return alert("Insira o código da peça");
+            // URL Base do redirecionamento do Arquivo da Propaganda
+            const urlBase = "https://s03.arquivo.net/ION3IMG/?COD=STHByteaXSXCoEULcSAygsQ9iO2Vuxl6w3NITyr39HthEIEU32KUkkwJkmnnD2QG2xZUC3AlOcCLg62aTPqkifxCSr9ext$$I8qIbKeRjN-jjBP6ccMWhdulbQIAvjIrndAijw3uxwXDfTX2qse8vuMurs7fYUXZlfbVVj3gVQaKXUzE";
+            window.open(urlBase, '_blank');
         }
 
-        setInterval(() => { document.getElementById('relogio').innerText = new Date().toLocaleString(); }, 1000);
+        setInterval(() => { document.getElementById('relogio').innerText = new Date().toLocaleTimeString(); }, 1000);
         renderSocial();
     </script>
 </body>
