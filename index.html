@@ -2,159 +2,137 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Americanas | Intelligence Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <title>Americanas | Intelligence Hub & Search B.I.</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; }
-        .column-scroll { height: calc(100vh - 250px); overflow-y: auto; padding-right: 8px; scrollbar-width: thin; }
-        .column-scroll::-webkit-scrollbar { width: 3px; }
-        .column-scroll::-webkit-scrollbar-thumb { background: #e2e8f0; border-radius: 10px; }
+        .column-scroll { height: calc(100vh - 280px); overflow-y: auto; scrollbar-width: thin; }
         .tab-active { border-bottom: 3px solid #E60014; color: #E60014; font-weight: 800; }
-        .ai-card { transition: all 0.3s ease; border: 1px solid #f1f5f9; }
-        /* Garantindo que o Iframe ocupe a tela toda */
-        .iframe-container { width: 100%; height: calc(100vh - 180px); border-radius: 16px; overflow: hidden; border: 1px solid #e2e8f0; background: white; }
+        .search-input { @apply w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-[11px] font-semibold focus:ring-2 focus:ring-red-500 outline-none; }
     </style>
 </head>
 <body class="antialiased">
 
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm">
-        <div class="max-w-full mx-auto px-10 py-4 flex justify-between items-center">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-50 shadow-sm px-10 py-4">
+        <div class="flex justify-between items-center">
             <div class="flex items-center gap-6">
                 <div class="w-2 h-10 bg-[#E60014] rounded-full"></div>
                 <div>
-                    <h1 class="text-xl font-extrabold text-slate-900 uppercase italic tracking-tighter">Americanas Intelligence</h1>
+                    <h1 class="text-xl font-black text-slate-900 uppercase italic tracking-tighter">Americanas Intelligence</h1>
                     <div class="flex gap-6 mt-2">
-                        <button onclick="changeTab('instagram')" id="btn-insta" class="tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2 transition-all">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg" class="w-3 h-3"> Instagram
+                        <button onclick="switchMode('social')" id="btn-social" class="tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2 transition-all">
+                             📡 Social Radar
                         </button>
-                        <button onclick="changeTab('youtube')" id="btn-yt" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 flex items-center gap-2 transition-all">
-                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg" class="w-3.5 h-3.5"> YouTube
-                        </button>
-                        <button onclick="changeTab('archive')" id="btn-archive" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 flex items-center gap-2 transition-all">
-                            <span class="text-sm">📺</span> Media Archive (B.I)
+                        <button onclick="switchMode('search')" id="btn-search" class="text-slate-400 text-[10px] uppercase tracking-widest pb-1 hover:text-red-600 flex items-center gap-2 transition-all">
+                             🔍 Buscador B.I.
                         </button>
                     </div>
                 </div>
             </div>
-            <div id="relogio" class="text-[10px] font-bold text-slate-400 bg-slate-50 px-4 py-2 rounded-lg border border-slate-100 italic"></div>
+            <div id="relogio" class="text-[10px] font-mono text-slate-400"></div>
         </div>
     </header>
 
     <main class="p-8">
-        <div id="social-view" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-8">
+        
+        <div id="view-social" class="grid grid-cols-1 md:grid-cols-6 gap-6">
             </div>
 
-        <div id="archive-view" class="hidden">
-            <div class="space-y-4">
-                <div class="flex justify-between items-end">
-                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Monitoramento Offline & TV | Filtros Ativos</p>
-                    <a href="https://arquivo.net/apws/?Arquivo_da_Propaganda_&COD=p3o$C6cNPr1nOZp0LJSFMZlFTr5X0VfM6jv7wIF76lRG0k803-8xDFgAyjnlyjQwBmR$vkG$qiV6sFgRs24zDsRt6F4E33n-3Ws91Gci8V1TAW9qHXRFL1FCA2RR81FKC0dAJbhuO7Rv$m4503t$DoW8JIVoJ6pI6GKw$Il4J4-2AXFzHKOJ9Ko7O1c01kR-DVsp9KpKRMOlUJhmWuudcNO7K4B833KDL5W1JAuc3yI5rnAikwkvChcgzUCMf--0yGNoEbCwTX8$5WkFvkO60kcy1H5F14gr2Fh64m8MM6tI93R22IF40LBwT6gdOW8EBLGg0Vl1$5RtA5-a5r0oaV" 
-                       target="_blank" class="text-[10px] font-bold text-blue-600 hover:underline">Abrir em nova aba ↗</a>
+        <div id="view-search" class="hidden max-w-4xl mx-auto space-y-8">
+            <div class="bg-white p-8 rounded-3xl shadow-xl border border-slate-100">
+                <h2 class="text-lg font-black text-slate-800 uppercase italic mb-6">Relatório de Busca Mídia Offline</h2>
+                
+                <div class="grid grid-cols-2 gap-6">
+                    <div>
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Anunciante</label>
+                        <input type="text" id="search-anunciante" placeholder="Ex: Mercado Livre" class="search-input">
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Campanha / Produto</label>
+                        <input type="text" id="search-campanha" placeholder="Ex: Black Friday" class="search-input">
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Praça / Veículo</label>
+                        <input type="text" id="search-veiculo" placeholder="Ex: Globo SP" class="search-input">
+                    </div>
+                    <div>
+                        <label class="text-[9px] font-black text-slate-400 uppercase tracking-widest">Categoria</label>
+                        <select id="search-cat" class="search-input">
+                            <option value="">Todas</option>
+                            <option>Varejo</option><option>Institucional</option><option>Lançamento</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="iframe-container">
-                    <iframe 
-                        id="bi-frame"
-                        src="https://arquivo.net/apws/?Arquivo_da_Propaganda_&COD=p3o$C6cNPr1nOZp0LJSFMZlFTr5X0VfM6jv7wIF76lRG0k803-8xDFgAyjnlyjQwBmR$vkG$qiV6sFgRs24zDsRt6F4E33n-3Ws91Gci8V1TAW9qHXRFL1FCA2RR81FKC0dAJbhuO7Rv$m4503t$DoW8JIVoJ6pI6GKw$Il4J4-2AXFzHKOJ9Ko7O1c01kR-DVsp9KpKRMOlUJhmWuudcNO7K4B833KDL5W1JAuc3yI5rnAikwkvChcgzUCMf--0yGNoEbCwTX8$5WkFvkO60kcy1H5F14gr2Fh64m8MM6tI93R22IF40LBwT6gdOW8EBLGg0Vl1$5RtA5-a5r0oaV" 
-                        style="width: 100%; height: 100%; border: none;"
-                        allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" 
-                        allowfullscreen>
-                    </iframe>
-                </div>
+
+                <button onclick="executarBusca()" class="w-full mt-8 bg-red-600 text-white font-black py-4 rounded-xl shadow-lg hover:bg-red-700 transition uppercase tracking-widest">
+                    Gerar Relatório e Redirecionar →
+                </button>
             </div>
+            
+            <p class="text-center text-[10px] text-slate-400 italic font-medium uppercase tracking-widest">
+                Os resultados serão abertos diretamente no portal Arquivo da Propaganda.
+            </p>
         </div>
     </main>
 
     <script>
-        let currentTab = 'instagram';
-
         const BRANDS = [
-            { id: 'ml', name: 'Mercado Livre', color: '#FFE600', insta: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', youtube: 'https://api.apify.com/v2/datasets/fJvDUXlWAtVlJ4eJM/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { id: 'shopee', name: 'Shopee', color: '#EE4D2D', insta: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', youtube: 'https://api.apify.com/v2/datasets/TUSjJTzKNLbGb9FIx/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { id: 'ifood', name: 'iFood', color: '#EA1D2C', insta: 'https://api.apify.com/v2/datasets/kiXhxoVHPO9e5HOTe/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', youtube: 'https://api.apify.com/v2/datasets/dom1DPPiCxV5WthCk/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { id: 'magalu', name: 'Magalu', color: '#0086FF', insta: 'https://api.apify.com/v2/datasets/M3Okwl3oPKPCS0tae/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', youtube: 'https://api.apify.com/v2/datasets/0Rl4Nt2yMtVWOO5c4/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { id: 'casasbahia', name: 'Casas Bahia', color: '#003399', insta: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', youtube: 'https://api.apify.com/v2/datasets/Nu4Q0vBcCLRDjYfHY/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
-            { id: 'carrefour', name: 'Carrefour', color: '#004899', insta: 'https://api.apify.com/v2/datasets/wutcPfuc9JX3t4Jmg/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N', youtube: 'https://api.apify.com/v2/datasets/AIfrLtFfV64nwN31l/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' }
+            { name: 'Mercado Livre', color: '#FFE600', insta: 'https://api.apify.com/v2/datasets/9bCOyLMYe3od6SF6c/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Shopee', color: '#EE4D2D', insta: 'https://api.apify.com/v2/datasets/Dj4FN5l8dRchgV4AI/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'iFood', color: '#EA1D2C', insta: 'https://api.apify.com/v2/datasets/kiXhxoVHPO9e5HOTe/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Magalu', color: '#0086FF', insta: 'https://api.apify.com/v2/datasets/M3Okwl3oPKPCS0tae/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Casas Bahia', color: '#003399', insta: 'https://api.apify.com/v2/datasets/rjlTrQdObGnYkCiNv/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' },
+            { name: 'Carrefour', color: '#004899', insta: 'https://api.apify.com/v2/datasets/wutcPfuc9JX3t4Jmg/items?token=apify_api_BFPY25NKket8tQpPgp7lAmc1DQp2aA0YBu2N' }
         ];
 
-        function changeTab(tabName) {
-            currentTab = tabName;
-            
-            // Atualizar Estilo das Abas
-            document.querySelectorAll('button[id^="btn-"]').forEach(btn => {
-                btn.className = 'text-slate-400 text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2 transition-all';
-            });
-            document.getElementById('btn-' + (tabName === 'archive' ? 'archive' : (tabName === 'instagram' ? 'insta' : 'yt'))).className = 'tab-active text-[10px] uppercase tracking-widest pb-1 flex items-center gap-2 transition-all';
-
-            // Toggle de Views
-            if (tabName === 'archive') {
-                document.getElementById('social-view').classList.add('hidden');
-                document.getElementById('archive-view').classList.remove('hidden');
-                // Recarregar o iframe para garantir que as buscas funcionem
-                const frame = document.getElementById('bi-frame');
-                frame.src = frame.src;
-            } else {
-                document.getElementById('social-view').classList.remove('hidden');
-                document.getElementById('archive-view').classList.add('hidden');
-                renderSocial();
-            }
-        }
-
-        async function fetchFeed(url) {
-            if (!url) return [];
-            try {
-                const response = await fetch(url + '&clean=true&format=json');
-                return await response.json();
-            } catch (e) { return []; }
+        function switchMode(mode) {
+            document.getElementById('view-social').classList.toggle('hidden', mode !== 'social');
+            document.getElementById('view-search').classList.toggle('hidden', mode !== 'search');
+            document.getElementById('btn-social').classList.toggle('tab-active', mode === 'social');
+            document.getElementById('btn-search').classList.toggle('tab-active', mode === 'search');
+            if(mode === 'social') renderSocial();
         }
 
         async function renderSocial() {
-            const grid = document.getElementById('social-view');
+            const grid = document.getElementById('view-social');
             grid.innerHTML = '';
 
             for (const brand of BRANDS) {
-                const api = currentTab === 'instagram' ? brand.insta : brand.youtube;
-                const posts = await fetchFeed(api);
+                const response = await fetch(brand.insta + '&clean=true&format=json');
+                const posts = await response.json();
                 
-                let colHtml = `
-                    <div class="flex flex-col gap-4">
-                        <div class="border-t-4 pt-2" style="border-color: ${brand.color}">
-                            <h2 class="text-[11px] font-black text-slate-800 uppercase tracking-widest">${brand.name}</h2>
-                        </div>
-                        <div class="column-scroll space-y-6">`;
+                let col = `<div class="space-y-4">
+                    <div class="border-t-4 pt-2" style="border-color:${brand.color}"><h2 class="text-[11px] font-black uppercase">${brand.name}</h2></div>
+                    <div class="column-scroll space-y-4">`;
 
-                if (posts.length === 0) {
-                    colHtml += `<div class="py-10 text-center text-[9px] text-slate-300 italic uppercase">Aguardando API...</div>`;
-                } else {
-                    posts.sort((a,b) => new Date(b.timestamp || b.publishedAt) - new Date(a.timestamp || a.publishedAt)).slice(0, 5).forEach(item => {
-                        const rawImg = item.displayUrl || item.videoThumbnail || item.thumbnail;
-                        const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(rawImg)}&w=500&fit=cover`;
-                        const link = item.url || (item.id ? `https://youtube.com/watch?v=${item.id}` : '#');
-                        const date = new Date(item.timestamp || item.publishedAt).toLocaleDateString('pt-BR', {day:'2-digit', month:'short'});
-
-                        colHtml += `
-                            <div class="ai-card bg-white rounded-2xl overflow-hidden shadow-sm">
-                                <div class="relative ${currentTab === 'youtube' ? 'aspect-video' : 'aspect-square'}">
-                                    <a href="${link}" target="_blank"><img src="${imgUrl}" class="w-full h-full object-cover"></a>
-                                    <div class="absolute top-2 left-2 flex items-center gap-2 px-2 py-1 bg-white/90 backdrop-blur rounded shadow-sm">
-                                        <img src="${currentTab === 'instagram' ? 'https://upload.wikimedia.org/wikipedia/commons/e/e7/Instagram_logo_2016.svg' : 'https://upload.wikimedia.org/wikipedia/commons/0/09/YouTube_full-color_icon_%282017%29.svg'}" class="w-2.5 h-2.5">
-                                        <span class="text-[8px] font-black uppercase">${currentTab}</span>
-                                    </div>
-                                    <div class="absolute bottom-2 right-2 px-2 py-1 bg-black/60 rounded text-[8px] font-bold text-white uppercase tracking-widest">${date}</div>
-                                </div>
-                                <div class="p-4 space-y-3">
-                                    <p class="text-[9px] text-slate-400 line-clamp-2 leading-tight">${item.caption || item.title || "Sem título"}</p>
-                                </div>
-                            </div>`;
-                    });
-                }
-                colHtml += `</div></div>`;
-                grid.innerHTML += colHtml;
+                posts.sort((a,b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 4).forEach(item => {
+                    const imgUrl = `https://images.weserv.nl/?url=${encodeURIComponent(item.displayUrl || item.thumbnailUrl || item.videoThumbnail)}&w=400&h=400&fit=cover`;
+                    col += `
+                        <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-slate-100">
+                            <img src="${imgUrl}" class="w-full aspect-square object-cover bg-slate-100">
+                            <div class="p-3"><p class="text-[9px] text-slate-400 line-clamp-2">${item.caption || 'Sem legenda'}</p></div>
+                        </div>`;
+                });
+                col += `</div></div>`;
+                grid.innerHTML += col;
             }
         }
 
-        setInterval(() => { document.getElementById('relogio').innerText = new Date().toLocaleString('pt-BR'); }, 1000);
+        function executarBusca() {
+            // Pega os termos de busca
+            const anun = document.getElementById('search-anunciante').value;
+            const camp = document.getElementById('search-campanha').value;
+            const praca = document.getElementById('search-veiculo').value;
+            
+            // Link base do arquivo que você forneceu
+            const linkBase = "https://arquivo.net/apws/?Arquivo_da_Propaganda_&COD=p3o$C6cNPr1nOZp0LJSFMZlFTr5X0VfM6jv7wIF76lRG0k803-8xDFgAyjnlyjQwBmR$vkG$qiV6sFgRs24zDsRt6F4E33n-3Ws91Gci8V1TAW9qHXRFL1FCA2RR81FKC0dAJbhuO7Rv$m4503t$DoW8JIVoJ6pI6GKw$Il4J4-2AXFzHKOJ9Ko7O1c01kR-DVsp9KpKRMOlUJhmWuudcNO7K4B833KDL5W1JAuc3yI5rnAikwkvChcgzUCMf--0yGNoEbCwTX8$5WkFvkO60kcy1H5F14gr2Fh64m8MM6tI93R22IF40LBwT6gdOW8EBLGg0Vl1$5RtA5-a5r0oaV";
+            
+            // Abre o arquivo - em um sistema real, aqui você concatenaria os termos de busca na URL se o portal permitir parâmetros via GET
+            window.open(linkBase, '_blank');
+        }
+
+        setInterval(() => { document.getElementById('relogio').innerText = new Date().toLocaleString(); }, 1000);
         renderSocial();
     </script>
 </body>
